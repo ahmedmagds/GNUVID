@@ -123,7 +123,7 @@ isolate_y | 4 | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | Expected | 4 (SLV) | China |
 
 Note: If -cc option is used seven columns will be added to the report showing the percentage distribution of the ST in 7 regions.
 
-**GNUVID_date_time.log** (Log file, e.g. WhatsGNU_v1_20190209_183406.log)
+**GNUVID_date_time.log** (Log file, e.g. GNUVID_20200607_170457.log)
 
 #### Always with -m
 * prefix_comp_db.txt
@@ -133,4 +133,24 @@ Isolate | Date | Country | Region | ORF1ab | Surface_glycoprotein | ORF3a | Enve
 ------- | ---- | ------- | ------ | ------ | -------------------- | ----- | ---------------- | --------------------- | ---- | ----- | ---- | --------------------------- | ----- | -- |
 isolate_1 | 2019-12-24 | China | Asia | 4 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 4 |
 isolate_2 | 2019-01-30 | USA | North America | 5 | 1 | 10 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 5 |
+
+## Bugs
+Please submit via the GitHub issues page: https://github.com/ahmedmagds/GNUVID/issues
+## Software Licence
+GPLv3: https://github.com/ahmedmagds/GNUVID/blob/master/LICENSE
+## Citations
+### GNUVID
+Rapid whole genome sequence typing reveals multiple waves of SARS-CoV-2 spread<br/>
+[Moustafa AM and Planet PJ 2020, bioRxiv;]()<br/>
+### Other tools
+* Please cite [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU) 'Moustafa AM and Planet PJ 2020, Genome Biology;21:58'.
+* Please also cite BLAST+ 'Camacho et al. 2009, BMC Bioinformatics;10:421' if you use WhatsGNU.
+* Please also cite GISAID 'Shu Y. and McCauley J. 2017, EuroSurveillance; 22:13'
+* Please also cite the reference genome MN908947 'Wu et al. 2020, Nature; 579:265–269'
+* Please also cite eBURST 'Feil et al. 2004,  Journal of Bacteriology; 186:1518'
+* Please also cite goeBURST 'Francisco et al. 2009, BMC Bioinformatics; 10:152'
+* Please also cite PHYLOViZ 2.0 'Nascimento et al. 2017, Bioinformatics; 33:128-129'
+## Author
+Ahmed M. Moustafa: [ahmedmagds](https://github.com/ahmedmagds)<br/>
+Twitter: [Ahmed_Microbes](https://twitter.com/Ahmed_Microbes)
 
