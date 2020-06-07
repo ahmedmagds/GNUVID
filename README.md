@@ -26,21 +26,60 @@ If you need it permanently, you can add this last line to your .bashrc or .bash_
 
 ## Usage for GNUVID.py
 ### Input
-1. database (precompressed (.txt) or a folder of individual genomes(.fna)).
-2. Query CDS or whole genome FASTA file (.fna) or folder of query files.
-3. Reference File.
+1. database (precompressed (.txt) or a folder of individual genomes(.fna) to be compressed).
+2. Reference File (MN908947.3_cds.fna).
+3. Query CDS or whole genome FASTA file (.fna) or folder of query files.
 
-### Create commpressed database or Use precompressed database
+### Create commpressed database (ordered by date of collection)
 ```
-$GNUVID.py -m COVID19_11113_strains_individual/ -l Strains_date_order.txt -o GNUVID_db_results -p GNUVID -cc country_continent.csv test_queries/
-or
-$GNUVID.py -d GNUVID_results/GNUVID_comp_db.txt -o GNUVID_output WG test_WG_query/
-or
-$GNUVID.py -d GNUVID_results/GNUVID_comp_db.txt -o GNUVID_output CDS test_CDS_query/
+$GNUVID.py -m COVID19_11113_strains_individual/ -l Strains_date_order.txt -o GNUVID_db_results -p GNUVID MN908947.3_cds.fna CDS queries_folder/
 ```
-### Use precompressed databases with more features
+### Create commpressed database (ordered by date of collection and Regions assigned to the countries)
+**Preferred**
+```
+$GNUVID.py -m COVID19_11113_strains_individual/ -l Strains_date_order.txt -cc country_region.csv -o GNUVID_db_results -p GNUVID MN908947.3_cds.fna CDS queries_folder/
+```
+### Use precompressed database
 
-### Use all features together
+**Whole Genome Mode (the script will use blastn to identify the 10 ORFs in the WGS)**
 ```
+$GNUVID.py -d GNUVID_comp_db.txt -o GNUVID_output MN908947.3_cds.fna WG test_WG_query/
+```
+or **CDS Mode**
+```
+$GNUVID.py -d GNUVID_comp_db.txt -o GNUVID_output MN908947.3_cds.fna CDS test_CDS_query/
 ```
 ### Command line options
+```
+usage: GNUVID.py [-h] [-m MKDATABASE | -d DATABASE] [-l LIST_ORDER] [-cc COUNTRY_CONTINENT] [-o OUTPUT_FOLDER] [--force]
+                 [-p PREFIX] [-q] [-v]
+                 reference {WG,CDS} query_fna
+
+GNUVID v1.0 utilizes the natural variation in public genomes of SARS-CoV-2 to rank gene sequences based on the number of
+observed exact matches (the GNU score) in all known genomes of SARS-CoV-2. It types the genomes based on their unique gene
+allele sequences. It types (using a whole genome MLST) your query genome in seconds.
+
+positional arguments:
+  reference             full path to the reference (MN908947.3_cds.fna)
+  {WG,CDS}              select a mode from 'WG' or 'CDS' for query files
+  query_fna             Query Whole Genome or CDS (for the 10 ORFs) Nucleotide FASTA file/s to analyze (.fna)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -m MKDATABASE, --mkdatabase MKDATABASE
+                        you have to provide path to a folder of multiple fna files for compression
+  -d DATABASE, --database DATABASE
+                        you have to provide path to your compressed database
+  -l LIST_ORDER, --list_order LIST_ORDER
+                        you have to provide path to txt file with strains order of interest for time feed
+  -cc COUNTRY_CONTINENT, --country_continent COUNTRY_CONTINENT
+                        you have to provide path to csv file with a country to continent assignment
+  -o OUTPUT_FOLDER, --output_folder OUTPUT_FOLDER
+                        Database output prefix to be created for results (default: timestamped GNUVID_results in the current
+                        directory)
+  --force               Force overwriting existing results folder assigned with -o (default: off)
+  -p PREFIX, --prefix PREFIX
+                        Prefix for output compressed database (default: GNUVID)
+  -q, --quiet           No screen output [default OFF]
+  -v, --version         print version and exit
+```
