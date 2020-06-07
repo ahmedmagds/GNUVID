@@ -29,6 +29,8 @@ If you need it permanently, you can add this last line to your .bashrc or .bash_
 1. database (precompressed (.txt) or a folder of individual genomes(.fna) to be compressed).
 2. Reference File (MN908947.3_cds.fna).
 3. Query CDS or whole genome FASTA file (.fna) or folder of query files.
+4. Strains_order.txt: order of the strains by date of collection (**optional but preferred**).
+5. country_region.csv: Assigning regions (Europe, Asia..etc) to different countries (**optional but preferred**).
 
 ### Create commpressed database (ordered by date of collection)
 ```
@@ -45,7 +47,7 @@ $GNUVID.py -m COVID19_11113_strains_individual/ -l Strains_date_order.txt -cc co
 ```
 $GNUVID.py -d GNUVID_comp_db.txt -o GNUVID_output MN908947.3_cds.fna WG test_WG_query/
 ```
-or **CDS Mode**
+**CDS Mode**
 ```
 $GNUVID.py -d GNUVID_comp_db.txt -o GNUVID_output MN908947.3_cds.fna CDS test_CDS_query/
 ```
