@@ -127,7 +127,7 @@ Note: If -cc option is used seven columns will be added to the report showing th
 
 #### Always with -m
 * prefix_comp_db.txt
-* prefix_DB_isolates_report
+* prefix_DB_isolates_report.txt
 
 Isolate | Date | Country | Region | ORF1ab | Surface_glycoprotein | ORF3a | Envelope_protein | Membrane_glycoprotein | ORF6 | ORF7a | ORF8 | Nucleocapsid_phosphoprotein | ORF10 | ST |
 ------- | ---- | ------- | ------ | ------ | -------------------- | ----- | ---------------- | --------------------- | ---- | ----- | ---- | --------------------------- | ----- | -- |
