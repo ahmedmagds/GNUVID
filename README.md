@@ -101,7 +101,9 @@ isolate_x_Gene_10 | 2 | 117 | ORF10 | ATGTAA | 0 | 1 | 2019-12-24 | 2020-05-04 |
 * Column 6: Number of Ns and degenerate bases in the query gene sequence
 * Column 7: Alelle number from the database
 * Column 8: First date this allele was seen
-* Column 9: Last date this allele was seen<br/>     
+* Column 9: Last date this allele was seen<br/>
+
+Note: This report should have 10 rows for the ORFs.
 
 **Query_isolates_GNUVID_ST_Report** (tab-separated output file)
 Isolate	ORF1ab	Surface_glycoprotein	ORF3a	Envelope_protein	Membrane_glycoprotein	ORF6	ORF7a	ORF8	Nucleocapsid_phosphoprotein	ORF10	Allele profile	ST (level of variation)	First Country	First date seen	last date seen	Europe	North America	Asia	Oceania	South America	Africa	Central America
@@ -125,4 +127,10 @@ Note: If -cc option is used seven columns will be added to the report showing th
 
 #### Always with -m
 * prefix_comp_db.txt
-* prefix_DB_isolates_report.txt
+* prefix_DB_isolates_report
+
+Isolate | Date | Country | Region | ORF1ab | Surface_glycoprotein | ORF3a | Envelope_protein | Membrane_glycoprotein | ORF6 | ORF7a | ORF8 | Nucleocapsid_phosphoprotein | ORF10 | ST |
+------- | ---- | ------- | ------ | ------ | -------------------- | ----- | ---------------- | --------------------- | ---- | ----- | ---- | --------------------------- | ----- | -- |
+isolate_1 | 2019-12-24 | China | Asia | 4 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 4 |
+isolate_2 | 2019-01-30 | USA | North America | 5 | 1 | 10 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 5 |
+
