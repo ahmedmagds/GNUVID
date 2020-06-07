@@ -85,3 +85,44 @@ optional arguments:
   -q, --quiet           No screen output [default OFF]
   -v, --version         print version and exit
 ```
+### Output
+#### Always with -m or -d
+**query_GNUVID_report.txt** (tab-separated output file)
+
+Query Gene | GNU score | length | Gene | sequence | Ns count | Allele number | First date seen | Last date seen |
+---------- | --------- | ------ | ---- | -------- | -------- | ------------- | --------------- | -------------- |
+isolate_x_Gene_10 | 2 | 117 | ORF10 | ATGTAA | 0 | 1 | 2019-12-24 | 2020-05-04 |
+
+* Column 1: Query Gene name
+* Column 2: GNU score (number of exact matches in the database)
+* Column 3: Query gene sequence length
+* Column 4: Gene function from the database
+* Column 5: Gene sequence
+* Column 6: Number of Ns and degenerate bases in the query gene sequence
+* Column 7: Alelle number from the database
+* Column 8: First date this allele was seen
+* Column 9: Last date this allele was seen<br/>     
+
+**Query_isolates_GNUVID_ST_Report** (tab-separated output file)
+Isolate	ORF1ab	Surface_glycoprotein	ORF3a	Envelope_protein	Membrane_glycoprotein	ORF6	ORF7a	ORF8	Nucleocapsid_phosphoprotein	ORF10	Allele profile	ST (level of variation)	First Country	First date seen	last date seen	Europe	North America	Asia	Oceania	South America	Africa	Central America
+
+Isolate | ORF1ab | Surface_glycoprotein | ORF3a | Envelope_protein | Membrane_glycoprotein | ORF6 | ORF7a | ORF8 | Nucleocapsid_phosphoprotein | ORF10 | Allele profile | ST (level of variation) | First Country | First date seen | last date seen |
+------- | ------ | -------------------- | ----- | ---------------- | --------------------- | ---- | ----- | ---- | --------------------------- | ----- | -------------- | ----------------------- | ------------- | --------------- | --------------- |
+isolate_x | 4 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | Exact | 4 | China | 2019-12-30 | 2020-04-04 |
+isolate_y | 4 | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | Expected | 4 (SLV) | China | 2019-12-30 | 2020-04-04 |
+
+* Column 1: Query Isolate name
+* Columns 2-11: The allele numbers for the 10 ORFs 
+* Column 12: Matching Level (Exact if alleles are in the database or Expected if one allele or more are novel)
+* Column 13: ST (Level of variation from the expected ST (SLV, DLV or more than DLV))
+* Column 14: First Country where the ST was seen
+* Column 15: First Date when the ST was seen
+* Column 16: Last Date when the ST was seen<br/>
+
+Note: If -cc option is used seven columns will be added to the report showing the percentage distribution of the ST in 7 regions.
+
+**GNUVID_date_time.log** (Log file, e.g. WhatsGNU_v1_20190209_183406.log)
+
+#### Always with -m
+* prefix_comp_db.txt
+* prefix_DB_isolates_report.txt
