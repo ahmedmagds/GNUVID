@@ -1,0 +1,17 @@
+git:
+  depth: false
+language: python
+matrix:
+  include:
+    - python: 3.4
+    - python: 3.5
+    - python: 3.6
+    - python: 3.7
+      dist: xenial
+      sudo: true
+before_install:
+    - wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.10.0+-x64-linux.tar.gz
+    - tar xzf ncbi-blast-2.10.0+-x64-linux.tar.gz
+    - sudo mv ncbi-blast-2.10.0+/bin/* /usr/bin
+script:
+    - python3 bin/GNUVID.py -h
