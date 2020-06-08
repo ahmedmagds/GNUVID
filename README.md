@@ -2,7 +2,8 @@
 # GNUVID
 Gene Novelty Unit-based Virus Identification for SARS-CoV-2
 ## Introduction
-GNUVID (GNU-based Virus IDentification) is a Python3 program. It ranks CDS nucleotide sequences in a genome fna file based on the number of observed exact CDS nucleotide matches in a public or private database. It is created to type SARS-CoV-2 genomes using a whole genome wgMLST approach. The 10 ORFs (ORF1ab, S, ORF3a, E, M, ORF6, ORF7a, ORF8, N, ORF10) in SARS-CoV-2 are used for typing. It automatically assign allele numbers to each of the ORFs and a Sequence Type (ST) to the genome. It is based on our recent panallelome approach of [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU).<br/>
+GNUVID (GNU-based Virus IDentification) is a Python3 program. It ranks CDS nucleotide sequences in a genome fna file based on the number of observed exact CDS nucleotide matches in a public or private database. It was created to type SARS-CoV-2 genomes using a whole genome wgMLST approach. The 10 ORFs (ORF1ab, S, ORF3a, E, M, ORF6, ORF7a, ORF8, N, ORF10) in SARS-CoV-2 are used for typing. It automatically assigns allele numbers to each of the ORFs and a Sequence Type (ST) to the genome. It is based on our recent panallelome approach [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU).<br/>
+
 
 ## Installation
 ### Dependencies
