@@ -43,9 +43,9 @@ $GNUVID.py -m COVID19_10422_isolates/ -l Isolates_date_order.txt -o GNUVID_db_re
 ```
 $GNUVID.py -m COVID19_10422_isolates/ -l Isolates_date_order.txt -cc country_region.csv -o GNUVID_db_results -p GNUVID MN908947.3_cds.fna CDS queries_folder/
 ```
-### Use precompressed database
+### Use precompressed database (Most of the times)
 
-**Whole Genome Mode (the script will use blastn to identify the 10 ORFs in the WGS)**
+**Whole Genome Mode (GNUVID will use blastn to identify the 10 ORFs in the WGS)**
 ```
 $GNUVID.py -d db/GNUVID_05172020_comp_db.txt db/MN908947.3_cds.fna WG test_WG_query/
 ```
