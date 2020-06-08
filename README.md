@@ -34,12 +34,12 @@ If you need it permanently, you can add this last line to your .bashrc or .bash_
 
 ### Create commpressed database (ordered by date of collection)
 ```
-$GNUVID.py -m COVID19_11113_strains_individual/ -l Strains_date_order.txt -o GNUVID_db_results -p GNUVID MN908947.3_cds.fna CDS queries_folder/
+$GNUVID.py -m COVID19_10422_isolates/ -l Isolates_date_order.txt -o GNUVID_db_results -p GNUVID MN908947.3_cds.fna CDS queries_folder/
 ```
 ### Create commpressed database (ordered by date of collection and Regions assigned to the countries)
 **Preferred**
 ```
-$GNUVID.py -m COVID19_11113_strains_individual/ -l Strains_date_order.txt -cc country_region.csv -o GNUVID_db_results -p GNUVID MN908947.3_cds.fna CDS queries_folder/
+$GNUVID.py -m COVID19_10422_isolates/ -l Isolates_date_order.txt -cc country_region.csv -o GNUVID_db_results -p GNUVID MN908947.3_cds.fna CDS queries_folder/
 ```
 ### Use precompressed database
 
@@ -76,6 +76,7 @@ optional arguments:
                         you have to provide path to txt file with isolates ordered by collection date
   -cc COUNTRY_CONTINENT, --country_continent COUNTRY_CONTINENT
                         you have to provide path to csv file with a country to continent assignment
+                        csv of first three columns from GISAID acknowledgment table
   -o OUTPUT_FOLDER, --output_folder OUTPUT_FOLDER
                         Database output prefix to be created for results (default: timestamped GNUVID_results in the current
                         directory)
