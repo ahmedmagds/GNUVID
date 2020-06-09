@@ -147,7 +147,7 @@ The data used in GNUVID is from GISAID, but sequences were anonymised to fit wit
 ## Citations
 ### GNUVID
 Rapid whole genome sequence typing reveals multiple waves of SARS-CoV-2 spread<br/>
-[Moustafa AM and Planet PJ 2020, bioRxiv;]()<br/>
+[Moustafa AM and Planet PJ 2020, bioRxiv;2020.06.08.139055](https://doi.org/10.1101/2020.06.08.139055)<br/>
 ### Other tools
 * Please cite [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU) 'Moustafa AM and Planet PJ 2020, Genome Biology;21:58'.
 * Please also cite BLAST+ 'Camacho et al. 2009, BMC Bioinformatics;10:421' if you use WhatsGNU.
