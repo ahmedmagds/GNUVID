@@ -10,7 +10,7 @@ matrix:
       dist: xenial
       sudo: true
 before_install:
-    - wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.10.0+-x64-linux.tar.gz
+    - wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.10.0/ncbi-blast-2.10.0+-x64-linux.tar.gz
     - tar xzf ncbi-blast-2.10.0+-x64-linux.tar.gz
     - sudo mv ncbi-blast-2.10.0+/bin/* /usr/bin
 script:
