@@ -14,6 +14,8 @@ https://github.com/ahmedmagds/GNUVID/blob/master/Supp_Table_1_gisaid_hcov-19_ack
 
 - 10422 sequences have been included in this analysis.
 
+- GNUVID compressed the 104,220 ORFs in the 10422 genomes to 6244 unique alleles.
+
 - 5510 Sequence Types (STs) have been assigned in this dataset and were clustered in 24 clonal complexes (CCs).
 
 - 3 CCs have been inactive (i.e. Last time seen more than 1 month before the release).
@@ -34,6 +36,7 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | Clonal Complex            | Number of STs | Number of isolates | Most common 5 countries                             | Most common Region                             | Date range                 |   Status |
 |--------------------------|---------------|--------------------|----------------------------------------------------|-----------------------------------------------|---------------------------|---------|
 | 4 | 362 | 694 | USA (26%), United Kingdom (17%), China (15%), Netherlands (10%), Japan (9%) | Europe (38%) | 2019-12-24 to 2020-05-01 | Silent |
+| 26 | 22 | 42 | China (67%), Singapore (10%), USA (7%), Australia (5%), Nepal (2%) | Asia (81%) | 2019-12-30 to 2020-04-14 | Inactive |
 | 67 | 52 | 69 | Australia (45%), China (12%), Canada (9%), India (7%), United Arab Emirates (6%) | Oceania (45%) | 2020-01-19 to 2020-04-04 | Inactive |
 | 70 | 315 | 517 | United Kingdom (39%), Iceland (13%), Australia (11%), USA (10%), Netherlands (7%) | Europe (69%) | 2020-01-22 to 2020-04-22 | Silent |
 | **255** | 585 | 1122 | United Kingdom (22%), USA (12%), Iceland (9%), Netherlands (9%), Belgium (7%) | Europe (73%) | 2020-01-24 to 2020-05-03 | **Active** |
@@ -49,7 +52,6 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | 454 | 31 | 98 | France (28%), Belgium (22%), United Kingdom (8%), Luxembourg (7%), Switzerland (6%) | Europe (82%) | 2020-03-04 to 2020-04-26 | Silent |
 | **498** | 53 | 125 | United Kingdom (82%), USA (5%), Iceland (3%), Switzerland (3%), Australia (3%) | Europe (92%) | 2020-03-05 to 2020-05-02 | **Active** |
 | 623 | 24 | 58 | Australia (38%), USA (28%), Iceland (26%), Canada (5%), Mexico (2%) | Oceania (38%) | 2020-03-05 to 2020-04-17 | Silent |
-| 750 | 22 | 42 | China (67%), Singapore (10%), USA (7%), Australia (5%), Nepal (2%) | Asia (81%) | 2019-12-30 to 2020-04-14 | Inactive |
 | 768 | 131 | 224 | USA (98%), Australia (2%), Canada (0%) | North America (98%) | 2020-03-09 to 2020-04-25 | Silent |
 | **800** | 42 | 110 | Saudi Arabia (71%), India (10%), Turkey (5%), Austria (5%), Finland (4%) | Asia (82%) | 2020-03-10 to 2020-05-03 | **Active** |
 | 844 | 26 | 70 | USA (90%), France (3%), Canada (3%), Argentina (3%), Australia (1%) | North America (93%) | 2020-03-03 to 2020-04-30 | Silent |
@@ -80,7 +82,7 @@ If you need it permanently, you can add this last line to your .bashrc or .bash_
 
 ## Usage for GNUVID.py
 ### Input
-1. database (precompressed (.txt) or a folder of individual genomes(.fna) to be compressed).
+1. database (precompressed (.txt or .txt.gz) or a folder of individual genomes(.fna) to be compressed).
 2. Reference File (MN908947.3_cds.fna).
 3. Query CDS or whole genome FASTA file (.fna) or folder of query files.
 4. Strains_order.txt: order of the strains by date of collection (**optional with -m but preferred**).
@@ -103,7 +105,7 @@ $GNUVID.py -d db/GNUVID_05172020_comp_db.txt db/MN908947.3_cds.fna WG test_WG_qu
 ```
 **CDS Mode**
 ```
-$GNUVID.py -d db/GNUVID_05172020_comp_db.txt db/MN908947.3_cds.fna CDS test_CDS_query/
+$GNUVID.py -d db/GNUVID_05172020_comp_db.txt.gz db/MN908947.3_cds.fna CDS test_CDS_query/
 ```
 ### Command line options
 ```
