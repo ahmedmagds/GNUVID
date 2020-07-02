@@ -55,7 +55,7 @@ PARSER.add_argument(
     help="an inactive date cutoff, usually 1 month before release date, in this format (2020-06-03) to assign status"
 )
 PARSER.add_argument(
-    "silent_date", type=str, help="a silent date cutoff, usually 2 weeks before release date, in this format (2020-06-03) to assign status"
+    "quiet_date", type=str, help="a quiet date cutoff, usually 2 weeks before release date, in this format (2020-06-03) to assign status"
 )
 PARSER.add_argument(
     "DB_isolates_report", type=str, help="GNUVID_DB_isolates_report to analyze that has STs and CCs (.txt)"
@@ -66,8 +66,8 @@ if len(sys.argv) == 1:
 ARGS = PARSER.parse_args()
 #############################
 inactive_date = ARGS.inactive_date
-silent_date = ARGS.silent_date
-release_date = [inactive_date, silent_date]
+quiet_date = ARGS.quiet_date
+release_date = [inactive_date, quiet_date]
 ##############################
 output_report_file = (
           ARGS.DB_isolates_report.split("_DB_isolates_report.txt")[0]
@@ -133,7 +133,7 @@ output_report_header = 'Clonal Complex\tNumber of STs\tNumber of isolates\tMost 
 output_report_object.write(output_report_header)
 output_report_object2.write('| Clonal Complex            | Number of STs | Number of isolates | Most common 5 countries                             | Most common Region                             | Date range                 |   Status |\n|--------------------------|---------------|--------------------|----------------------------------------------------|-----------------------------------------------|---------------------------|---------|\n')
 for CC in sorted(CC_list):
-    release_date = [inactive_date, silent_date]
+    release_date = [inactive_date, quiet_date]
     STs_count = len(set(CC_STs_dict[CC]))
     isolates_count = len(CC_isolates_dict[CC])
     sorted_dates = sorted(CC_dates_dict[CC])
@@ -141,7 +141,7 @@ for CC in sorted(CC_list):
     if sorted_dates[-1] in release_date:
         date_index = release_date.index(sorted_dates[-1])
         if date_index == 0:
-            CC_state = "Silent"
+            CC_state = "Quiet"
         else:
             CC_state = "Active"
     else:
@@ -150,7 +150,7 @@ for CC in sorted(CC_list):
         if state_date == 0:
             CC_state = "Inactive"
         elif state_date == 1:
-            CC_state = "Silent"
+            CC_state = "Quiet"
         else:
             CC_state = "Active"
 
