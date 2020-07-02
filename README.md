@@ -22,7 +22,7 @@ https://github.com/ahmedmagds/GNUVID/blob/master/Supp_Table_1_gisaid_hcov-19_ack
 
 - 5 CCs have been active (i.e. Last seen within the 2 weeks before the release).
 
-![Image of CCs](https://github.com/ahmedmagds/GNUVID/blob/master/db/MST_05172020.pdf "Minimum spanning tree of the 5510 STs showing the 24 CCs")
+![Image of CCs](https://github.com/ahmedmagds/GNUVID/blob/master/db/MST_05172020.png "Minimum spanning tree of the 5510 STs showing the 24 CCs")
 
 The largest six CCs are red and the other 18 CCs are in black. The pie charts show the percentage distribution of genomes from the different geographic regions in each CC. The letter A and G next to the pie charts represent the Spike ORF nucleotide at position 23403 in MN908947.3. The ancestral nucleotide is A and the mutation is G resulting in D614G amino acid change.
 
