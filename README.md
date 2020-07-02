@@ -113,7 +113,7 @@ usage: GNUVID.py [-h] [-m MKDATABASE | -d DATABASE] [-l LIST_ORDER] [-cc COUNTRY
                  [-p PREFIX] [-q] [-v]
                  reference {WG,CDS} query_fna
 
-GNUVID v1.0 utilizes the natural variation in public genomes of SARS-CoV-2 to rank gene sequences based on the number of
+GNUVID v1.1 utilizes the natural variation in public genomes of SARS-CoV-2 to rank gene sequences based on the number of
 observed exact matches (the GNU score) in all known genomes of SARS-CoV-2. It types the genomes based on their unique gene
 allele sequences. It types (using a whole genome MLST) your query genome in seconds.
 

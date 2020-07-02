@@ -43,7 +43,7 @@ from collections import Counter
 from collections import OrderedDict
 
 PARSER = argparse.ArgumentParser(
-    prog="GNUVID_database_customizer.py", description="Database_customizer script for GNUVID v1.0.",)
+    prog="GNUVID_database_customizer.py", description="Database_customizer script for GNUVID v1.1.",)
 GROUP = PARSER.add_mutually_exclusive_group()
 GROUP.add_argument("-g", "--GenBank_RefSeq", help="fna files from GenBank or RefSeq", action="store_true",)
 GROUP.add_argument("-p", "--prokka", help="fna files from prokka", action="store_true",)
