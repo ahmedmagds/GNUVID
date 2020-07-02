@@ -42,6 +42,7 @@
 
 import os
 import sys
+import gzip
 from collections import defaultdict
 from collections import Counter
 from collections import OrderedDict
@@ -609,26 +610,39 @@ if ARGS.mkdatabase:
             ST_Region_dict_final[record] = ST_CC_percent_str
 elif ARGS.database:
     ST_allele_Dict = {} #has to be parsed if -d and not -m
-    if ARGS.database.endswith(".txt"):
-        try:
-            SEQUENCES_DICT = {}
-            TXT_DB_FILEOBJECT = open(ARGS.database, "r")
+    SEQUENCES_DICT = {}
+    if ARGS.database.endswith(".txt.gz"):
+        with gzip.open(ARGS.database,'rt') as fz:
             logging.info(
-                "opened previously created compressed txt database in --- {:.3f} seconds ---".format(
+                "opened previously created compressed txt.gz database in --- {:.3f} seconds ---".format(
                     time.time() - START_TIME
                 )
             )
-            for line in TXT_DB_FILEOBJECT:
+            for line in fz:
                 line = line.rstrip()
                 seq, ids = line.split("\t")
                 listids = ids.split("._/")
                 SEQUENCES_DICT[seq] = listids
-            if bool(SEQUENCES_DICT):
-                logging.info(
-                    "processed compressed txt database to dictionary in --- {:.3f} seconds ---".format(
-                        time.time() - START_TIME
-                    )
-                )
+    else:
+        TXT_DB_FILEOBJECT = open(ARGS.database, "r")
+        logging.info(
+            "opened previously created compressed txt database in --- {:.3f} seconds ---".format(
+                time.time() - START_TIME
+            )
+        )
+        for line in TXT_DB_FILEOBJECT:
+            line = line.rstrip()
+            seq, ids = line.split("\t")
+            listids = ids.split("._/")
+            SEQUENCES_DICT[seq] = listids
+    if bool(SEQUENCES_DICT):
+        logging.info(
+            "processed compressed txt database to dictionary in --- {:.3f} seconds ---".format(
+                time.time() - START_TIME
+            )
+        )
+    if ARGS.database.endswith(".txt") or ARGS.database.endswith(".txt.gz"):
+        try:
             OUTPUT_Reps = tempfile.NamedTemporaryFile(mode='w+')
             for record in SEQUENCES_DICT:
                 if record != 'Allele_counts':
