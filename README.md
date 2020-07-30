@@ -123,7 +123,7 @@ If you need it permanently, you can add this last line to your .bashrc or .bash_
 
 ### Test
 * Type GNUVID.py -h and it should output help screen.
-* Type GNUVID.py -v and you should see an output like GNUVID.py 1.2.
+* Type GNUVID.py -v and you should see an output like GNUVID.py 1.3.
 
 ## Usage for GNUVID.py
 ### Input
@@ -158,7 +158,7 @@ usage: GNUVID.py [-h] [-m MKDATABASE | -d DATABASE] [-l LIST_ORDER] [-cc COUNTRY
                  [-p PREFIX] [-q] [-v]
                  reference {WG,CDS} query_fna
 
-GNUVID v1.2 utilizes the natural variation in public genomes of SARS-CoV-2 to rank gene sequences based on the number of
+GNUVID v1.3 utilizes the natural variation in public genomes of SARS-CoV-2 to rank gene sequences based on the number of
 observed exact matches (the GNU score) in all known genomes of SARS-CoV-2. It types the genomes based on their unique gene
 allele sequences. It types (using a whole genome MLST) your query genome in seconds.
 
