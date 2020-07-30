@@ -58,6 +58,9 @@ PARSER.add_argument(
     "quiet_date", type=str, help="a quiet date cutoff, usually 2 weeks before release date, in this format (2020-06-03) to assign status"
 )
 PARSER.add_argument(
+    "Defining_SNPs", type=str, help="tab-separated file of CC, SNPs and GISAID clade (.txt)"
+)
+PARSER.add_argument(
     "DB_isolates_report", type=str, help="GNUVID_DB_isolates_report to analyze that has STs and CCs (.txt)"
 )
 if len(sys.argv) == 1:
@@ -128,15 +131,23 @@ for line in input_report_object:
       CC_region_dict[CC_number].append(ST_region)
       CC_STs_dict[CC_number].append(ST_number)
       CC_isolates_dict[CC_number].append(line_list[0])
+######SNPs and clade######
+input_report_object2 = open(ARGS.Defining_SNPs,'r')
+SNPs_dict = {}
+for line in input_report_object2:
+    line = line.rstrip()
+    line_list = line.split('\t')
+    SNPs_dict[int(line_list[0])] = [line_list[1],line_list[2]]
 ######Writing report######
-output_report_header = 'Clonal Complex\tNumber of STs\tNumber of isolates\tMost common 5 countries\tMost common Region\tDate range\tStatus\n'
+output_report_header = 'Clonal Complex\tNumber of STs\tNumber of isolates\tMost common 5 countries\tMost common Region\tDate range\tStatus\tDefining SNPs(C241,C3037,A23403,C8782,G11083,G25563,G26144,T28144,G28882)\t GISAID Clade\n'
 output_report_object.write(output_report_header)
-output_report_object2.write('| Clonal Complex            | Number of STs | Number of isolates | Most common 5 countries                             | Most common Region                             | Date range                 |   Status |\n|--------------------------|---------------|--------------------|----------------------------------------------------|-----------------------------------------------|---------------------------|---------|\n')
+output_report_object2.write('| Clonal Complex | Number of STs | Number of isolates | Most common 5 countries | Most common Region | Date range | Status | Defining SNPs | GISAID Clade |\n|----------------|---------------|--------------------|-------------------------|--------------------|------------|--------|---------------|--------------|\n')
 for CC in sorted(CC_list):
     release_date = [inactive_date, quiet_date]
     STs_count = len(set(CC_STs_dict[CC]))
     isolates_count = len(CC_isolates_dict[CC])
     sorted_dates = sorted(CC_dates_dict[CC])
+    SNPs_clade = SNPs_dict[CC]
     dates_range = sorted_dates[0] + ' to ' + sorted_dates[-1]
     if sorted_dates[-1] in release_date:
         date_index = release_date.index(sorted_dates[-1])
@@ -161,12 +172,12 @@ for CC in sorted(CC_list):
         Countries_list.append(country_percent)
     Top_Region = Counter(CC_region_dict[CC]).most_common(1)[0] #tuple
     Top_Region_percent = Top_Region[0] + " ({:.0%})".format(Top_Region[1]/isolates_count)
-    output_report_object.write('{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format(
+    output_report_object.write('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format(
             CC,STs_count,isolates_count,', '.join(Countries_list),
-            Top_Region_percent, dates_range, CC_state))
+            Top_Region_percent, dates_range, CC_state, '\t'.join(SNPs_clade)))
     if CC_state == "Active":
         CC_state = "**Active**"
         CC = "**" + str(CC) + "**"
-    output_report_object2.write('| {} | {} | {} | {} | {} | {} | {} |\n'.format(
+    output_report_object2.write('| {} | {} | {} | {} | {} | {} | {} | {} | {} |\n'.format(
             CC,STs_count,isolates_count,', '.join(Countries_list),
-            Top_Region_percent, dates_range, CC_state))
+            Top_Region_percent, dates_range, CC_state, SNPs_clade[0], SNPs_clade[1]))
