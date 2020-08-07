@@ -158,6 +158,8 @@ except:
 #####variables######
 SEQUENCES_DICT = {}
 TIMESTR = time.strftime("%Y%m%d_%H%M%S")
+Genes = ['ORF1ab','Surface_glycoprotein','ORF3a','Envelope_protein',
+'Membrane_glycoprotein','ORF6','ORF7a','ORF8','Nucleocapsid_phosphoprotein','ORF10']
 #####create results folder######
 if ARGS.output_folder:
     try:
@@ -239,7 +241,7 @@ if ARGS.query_mode == 'WG':
                     blast_report_tmp.seek(0)
                     for line in blast_report_tmp:
                         line_counter += 1
-                    line_counter == 10
+                    #line_counter == 10
                     CDS_file = (
                         RESULTS_FOLDER
                         + (QUERYFILE.rsplit(OS_SEPARATOR, 1)[-1]).split(".fna")[0]
@@ -247,12 +249,16 @@ if ARGS.query_mode == 'WG':
                     )
                     CDS_file_obj = open(CDS_file,'w')
                     blast_report_tmp.seek(0)
+                    Isolate_WG_dict = defaultdict(list)
                     for line in blast_report_tmp:
                         line_list = line.rstrip().split("\t")
                         hit_seq = line_list[1].replace('-','')
+                        Isolate_WG_dict[line_list[0]].append(hit_seq)
+                    for gene_name in Genes:
+                        longest_seq = sorted(Isolate_WG_dict[gene_name], key=len, reverse=True)[0]
                         hit_id = ('>'+(QUERYFILE.rsplit(OS_SEPARATOR, 1)[-1]).split(".fna")[0] + '|'
-                                + line_list[0] + '\n')
-                        CDS_file_obj.write(hit_id+hit_seq+'\n')
+                                + gene_name + '\n')
+                        CDS_file_obj.write(hit_id+longest_seq+'\n')
                     blast_report_tmp.close()
                     QUERY_LIST_TEMP.append(CDS_file)
                     CDS_file_obj.close()
@@ -276,7 +282,7 @@ if ARGS.query_mode == 'WG':
                     blast_report_tmp.seek(0)
                     for line in blast_report_tmp:
                         line_counter += 1
-                    line_counter == 10
+                    #line_counter == 10
                     CDS_file = (
                         RESULTS_FOLDER
                         + QUERYFILE.split(".fna")[0]
@@ -284,12 +290,16 @@ if ARGS.query_mode == 'WG':
                     )
                     CDS_file_obj = open(CDS_file,'w')
                     blast_report_tmp.seek(0)
+                    Isolate_WG_dict = defaultdict(list)
                     for line in blast_report_tmp:
                         line_list = line.rstrip().split("\t")
                         hit_seq = line_list[1].replace('-','')
-                        hit_id = ('>'+QUERYFILE.split(".fna")[0] + '|'
-                                + line_list[0] + '\n')
-                        CDS_file_obj.write(hit_id+hit_seq+'\n')
+                        Isolate_WG_dict[line_list[0]].append(hit_seq)
+                    for gene_name in Genes:
+                        longest_seq = sorted(Isolate_WG_dict[gene_name], key=len, reverse=True)[0]
+                        hit_id = ('>'+(QUERYFILE.rsplit(OS_SEPARATOR, 1)[-1]).split(".fna")[0] + '|'
+                                + gene_name + '\n')
+                        CDS_file_obj.write(hit_id+longest_seq+'\n')
                     blast_report_tmp.close()
                     QUERY_LIST_TEMP.append(CDS_file)
                     CDS_file_obj.close()
@@ -349,8 +359,6 @@ if ARGS.mkdatabase:
 #####Run database for first time#####
 PROTEIN_COUNTER = 0
 FILE_COUNTER = 0
-Genes = ['ORF1ab','Surface_glycoprotein','ORF3a','Envelope_protein',
-'Membrane_glycoprotein','ORF6','ORF7a','ORF8','Nucleocapsid_phosphoprotein','ORF10']
 Allele_counter = Counter()
 for gene in Genes:
     Allele_counter[gene] = 0
@@ -846,35 +854,40 @@ for QUERYFILE in QUERY_LIST:
                     blast_results = os.system("blastn -task blastn -query {} -subject {} -evalue 0.000001 -outfmt '6 qseqid sacc qseq sstart send pident qcovs' -out {}".format(OUTPUT_FILE_Zeros.name, OUTPUT_Reps.name, blast_report_tmp.name))
                     if blast_results == 0:
                         #####Blast results Parser#####
-                        blast_dict = {}
                         blast_report_tmp.seek(0)
-                        percent_list = []
-                        allele_list = []
-                        for line2 in blast_report_tmp:
-                            line2_list = line2.rstrip().split("\t")
-                            percent_id = float(line2_list[-2])
-                            percent_list.append(percent_id)
-                            allele_list.append(int(line2_list[1].rsplit('_',1)[-1]))
-                            if mean(percent_list) != percent_list[0]:
-                                break
-                        percent_list = percent_list[:-1]
-                        allele_list = allele_list[:-1]
-                        blast_report_tmp.seek(0)
-                        function = blast_report_tmp.readline().rstrip().split("\t")[1]
-                        allele_number = 'E' + str(min(allele_list))
-                        blast_report_tmp.close()
-                        Strain_Alleles[function.rsplit('_',1)[0]] = allele_number
-                        if Ns_count == 0:
-                            query_sequence_details = [sequence_info, '0',
-                            str(len(sequence_string)),function, sequence_string,
-                            str(Ns_count), allele_number, 'Novel', 'Novel']
+                        if len(blast_report_tmp.readline()) > 10:
+                            blast_report_tmp.seek(0)
+                            percent_list = []
+                            allele_list = []
+                            for line2 in blast_report_tmp:
+                                line2_list = line2.rstrip().split("\t")
+                                percent_id = float(line2_list[-2])
+                                percent_list.append(percent_id)
+                                allele_list.append(int(line2_list[1].rsplit('_',1)[-1]))
+                                if mean(percent_list) != percent_list[0]:
+                                    break
+                            percent_list = percent_list[:-1]
+                            allele_list = allele_list[:-1]
+                            blast_report_tmp.seek(0)
+                            function = blast_report_tmp.readline().rstrip().split("\t")[1]
+                            allele_number = 'E' + str(min(allele_list))
+                            blast_report_tmp.close()
+                            Strain_Alleles[function.rsplit('_',1)[0]] = allele_number
+                            if Ns_count == 0:
+                                query_sequence_details = [sequence_info, '0',
+                                str(len(sequence_string)),function, sequence_string,
+                                str(Ns_count), allele_number, 'Novel', 'Novel']
+                            else:
+                                query_sequence_details = [sequence_info, '0',
+                                str(len(sequence_string)),function, sequence_string,
+                                str(Ns_count), allele_number, 'NA', 'NA']
                         else:
                             query_sequence_details = [sequence_info, '0',
-                            str(len(sequence_string)),function, sequence_string,
-                            str(Ns_count), allele_number, 'NA', 'NA']
+                            str(len(sequence_string)),'NA', sequence_string,
+                            str(Ns_count), 'No Hits', 'NA', 'NA']
                     else:
                         query_sequence_details = [sequence_info, '0',
-                        str(len(sequence_string)),function, sequence_string,
+                        str(len(sequence_string)),'NA', sequence_string,
                         str(Ns_count), 'blast error', 'NA', 'NA']
                     output_file_report.write("{}\n".format(
                             "\t".join(query_sequence_details)))
@@ -914,35 +927,40 @@ for QUERYFILE in QUERY_LIST:
         blast_results = os.system("blastn -task blastn -query {} -subject {} -evalue 0.000001 -outfmt '6 qseqid sacc qseq sstart send pident qcovs' -out {}".format(OUTPUT_FILE_Zeros.name, OUTPUT_Reps.name, blast_report_tmp.name))
         if blast_results == 0:
             #####Blast results Parser#####
-            blast_dict = {}
             blast_report_tmp.seek(0)
-            percent_list = []
-            allele_list = []
-            for line2 in blast_report_tmp:
-                line2_list = line2.rstrip().split("\t")
-                percent_id = float(line2_list[-2])
-                percent_list.append(percent_id)
-                allele_list.append(int(line2_list[1].rsplit('_',1)[-1]))
-                if mean(percent_list) != percent_list[0]:
-                    break
-            percent_list = percent_list[:-1]
-            allele_list = allele_list[:-1]
-            blast_report_tmp.seek(0)
-            function = blast_report_tmp.readline().rstrip().split("\t")[1]
-            allele_number = 'E' + str(min(allele_list))
-            blast_report_tmp.close()
-            Strain_Alleles[function.rsplit('_',1)[0]] = allele_number
-            if Ns_count == 0:
-                query_sequence_details = [sequence_info, '0',
-                str(len(sequence_string)),function, sequence_string,
-                str(Ns_count), allele_number, 'Novel', 'Novel']
+            if len(blast_report_tmp.readline()) > 10:
+                blast_report_tmp.seek(0)
+                percent_list = []
+                allele_list = []
+                for line2 in blast_report_tmp:
+                    line2_list = line2.rstrip().split("\t")
+                    percent_id = float(line2_list[-2])
+                    percent_list.append(percent_id)
+                    allele_list.append(int(line2_list[1].rsplit('_',1)[-1]))
+                    if mean(percent_list) != percent_list[0]:
+                        break
+                percent_list = percent_list[:-1]
+                allele_list = allele_list[:-1]
+                blast_report_tmp.seek(0)
+                function = blast_report_tmp.readline().rstrip().split("\t")[1]
+                allele_number = 'E' + str(min(allele_list))
+                blast_report_tmp.close()
+                Strain_Alleles[function.rsplit('_',1)[0]] = allele_number
+                if Ns_count == 0:
+                    query_sequence_details = [sequence_info, '0',
+                    str(len(sequence_string)),function, sequence_string,
+                    str(Ns_count), allele_number, 'Novel', 'Novel']
+                else:
+                    query_sequence_details = [sequence_info, '0',
+                    str(len(sequence_string)),function, sequence_string,
+                    str(Ns_count), allele_number, 'NA', 'NA']
             else:
                 query_sequence_details = [sequence_info, '0',
-                str(len(sequence_string)),function, sequence_string,
-                str(Ns_count), allele_number, 'NA', 'NA']
+                str(len(sequence_string)),'NA', sequence_string,
+                str(Ns_count), 'No Hits', 'NA', 'NA']
         else:
             query_sequence_details = [sequence_info, '0',
-            str(len(sequence_string)),function, sequence_string,
+            str(len(sequence_string)),'NA', sequence_string,
             str(Ns_count), 'blast error', 'NA', 'NA']
         output_file_report.write("{}\n".format(
                 "\t".join(query_sequence_details)))
@@ -985,7 +1003,8 @@ for QUERYFILE in QUERY_LIST:
                 Expected_CC = CC_ST_dict[Expected_ST]
         except:
             for gene, gene_allele in zip(Genes, alleles_list2):
-                allele_STs_list.extend(Top_ST_dict[gene][gene_allele])
+                if gene_allele != 'NA':
+                    allele_STs_list.extend(Top_ST_dict[gene][gene_allele])
             C = Counter(allele_STs_list)
             Expected_ST, matching_variants = C.most_common(1)[0]
             if CC_index != 'NA':
