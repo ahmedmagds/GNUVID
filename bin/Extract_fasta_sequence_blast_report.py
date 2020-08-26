@@ -11,7 +11,7 @@ PARSER.add_argument(
     "--version",
     help="print version and exit",
     action="version",
-    version="%(prog)s 1.3",
+    version="%(prog)s 1.4",
 )
 PARSER.add_argument(
     "output_folder", type=str, help="output folder name & quality report prefix"
