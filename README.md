@@ -22,11 +22,11 @@ https://github.com/ahmedmagds/GNUVID/blob/master/GISAID_acknowledgement_table_20
 
 - 84 new CCs have been assigned.
 
-- 94 CCs have been Inactive (i.e. Last time seen more than 1 month before 2020-10-20).
+- 82 CCs have been Inactive (i.e. Last time seen more than 1 month before 2020-10-20).
 
-- 26 CCs have gone Quiet (i.e. Last seen 2-4 weeks before 2020-10-20).
+- 27 CCs have gone Quiet (i.e. Last seen 2-4 weeks before 2020-10-20).
 
-- 34 CCs have been Active (i.e. Last seen within the 2 weeks before 2020-10-20).
+- 45 CCs have been Active (i.e. Last seen within the 2 weeks before 2020-10-20).
 
 - CC70, CC26, CC343, CC439, CC927, CC1434, CC11290, CC13202, CC13669 and CC17244 have now been called CC550, CC750, CC9999, CC2649, CC1179, CC2175, CC18372, CC13208, CC12995 and CC13413 respectively.
 
@@ -35,49 +35,60 @@ https://github.com/ahmedmagds/GNUVID/blob/master/GISAID_acknowledgement_table_20
 
 ![Image of CCs](https://github.com/ahmedmagds/GNUVID/blob/master/db/MST_10202020.png)
 
-The 34 Active CCs are in red. The pie charts show the percentage distribution of genomes from the different geographic regions in each CC.
+The 45 Active CCs are in red. The pie charts show the percentage distribution of genomes from the different geographic regions in each CC.
 
-**The table below shows summary information of the 34 Active Clonal Complexes (CCs). A full list for the 154 CCs (including inactive and quiet) can be found [here](https://github.com/ahmedmagds/GNUVID/tree/master/db)**
+**The table below shows summary information of the 45 Active Clonal Complexes (CCs). A full list for the 154 CCs (including inactive and quiet) can be found [here](https://github.com/ahmedmagds/GNUVID/tree/master/db)**
 
 The "Most common 5 countries" and "Most common Region" columns show the five countries and the region, respectively, with the most sequences from each Clonal Complex. Starting from the DB update (10/20/2020), **the ten defining SNPs (C241,C3037,A23403,C8782,G11083,G25563,G26144,T28144,G28882,C22227)** for the seven GISAID clades are reported for each CC for easier correlation between the two systems.
 
 
 | Clonal Complex | Number of STs | Number of isolates | Most common 5 countries | Most common Region | Date range | Status | Defining SNPs | GISAID Clade |
 |----------------|---------------|--------------------|-------------------------|--------------------|------------|--------|---------------|--------------|
-| **300** | 4577 | 9266 | United Kingdom (47%), USA (15%), Portugal (5%), Australia (4%), Russia (3%) | Europe (67%) | 2020-01-24 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **317** | 144 | 393 | Japan (34%), USA (23%), United Kingdom (16%), Spain (4%), Switzerland (4%) | Asia (41%) | 2020-02-26 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **399** | 275 | 630 | United Kingdom (59%), Peru (11%), Canada (6%), Belgium (4%), Italy (3%) | Europe (74%) | 2020-03-02 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **498** | 343 | 707 | United Kingdom (45%), USA (42%), Switzerland (3%), Canada (2%), Spain (1%) | Europe (53%) | 2020-03-05 to 2020-10-06 | **Active** | TTGCGGGTGC | G |
-| **3859** | 79 | 260 | United Kingdom (98%), Norway (2%) | Europe (100%) | 2020-04-13 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **5447** | 343 | 609 | United Kingdom (62%), India (24%), Saudi Arabia (7%), Netherlands (1%), Ireland (1%) | Europe (66%) | 2020-02-16 to 2020-10-11 | **Active** | TTGCGTGTGC | GH |
-| **20544** | 30 | 98 | United Kingdom (100%) | Europe (100%) | 2020-05-05 to 2020-10-05 | **Active** | TTGCGGGTAC | GR |
-| **21976** | 52 | 93 | United Kingdom (58%), South Africa (32%), India (8%), USA (2%) | Europe (58%) | 2020-05-21 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **23107** | 47 | 141 | United Kingdom (100%) | Europe (100%) | 2020-06-15 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **25545** | 92 | 198 | United Kingdom (72%), Belgium (22%), Netherlands (2%), France (2%), Germany (2%) | Europe (100%) | 2020-07-09 to 2020-10-06 | **Active** | TTGCGGGTGC | G |
-| **25780** | 20 | 58 | United Kingdom (95%), New Zealand (3%), USA (2%) | Europe (95%) | 2020-04-06 to 2020-10-05 | **Active** | TTGCGGGTAC | GR |
-| **26377** | 231 | 643 | United Kingdom (95%), Spain (2%), Netherlands (2%), Ireland (1%), Switzerland (0%) | Europe (100%) | 2020-07-18 to 2020-10-13 | **Active** | TTGCGGGTGT | GV |
-| **26711** | 234 | 629 | United Kingdom (100%) | Europe (100%) | 2020-07-21 to 2020-10-08 | **Active** | TTGCTGGTAC | Not Applicaple |
-| **26754** | 119 | 284 | United Kingdom (74%), Norway (21%), Netherlands (1%), Spain (1%), France (1%) | Europe (100%) | 2020-06-20 to 2020-10-11 | **Active** | TTGCGGGTGT | GV |
-| **27413** | 52 | 232 | United Kingdom (100%) | Europe (100%) | 2020-07-28 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **27693** | 387 | 1102 | United Kingdom (99%), Netherlands (0%), Spain (0%), Ireland (0%), France (0%) | Europe (100%) | 2020-07-31 to 2020-10-10 | **Active** | TTGCGGGTGT | GV |
-| **27700** | 65 | 161 | United Kingdom (99%), Norway (1%) | Europe (100%) | 2020-07-31 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **27950** | 61 | 174 | United Kingdom (97%), Netherlands (2%), New Zealand (1%) | Europe (99%) | 2020-08-04 to 2020-10-08 | **Active** | TTGCGGGTGT | GV |
-| **28012** | 67 | 202 | United Kingdom (100%) | Europe (100%) | 2020-08-04 to 2020-10-06 | **Active** | TTGCGGGTGT | GV |
+| **255** | 2545 | 4408 | United Kingdom (22%), USA (21%), India (7%), Netherlands (6%), Canada (5%) | Europe (57%) | 2020-01-24 to 2020-10-06 | **Active** | TTGCGGGTGC | G |
+| **258** | 5301 | 10172 | USA (67%), United Kingdom (6%), France (4%), Netherlands (4%), Canada (3%) | North America (71%) | 2020-02-16 to 2020-10-05 | **Active** | TTGCGTGTGC | GH |
+| **297** | 171 | 299 | Belgium (24%), United Kingdom (18%), USA (12%), Switzerland (4%), Netherlands (4%) | Europe (73%) | 2020-02-26 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **300** | 7435 | 13477 | United Kingdom (47%), USA (15%), Australia (4%), Portugal (3%), Russia (3%) | Europe (66%) | 2020-01-24 to 2020-10-09 | **Active** | TTGCGGGTAC | GR |
+| **317** | 246 | 523 | Japan (29%), USA (24%), United Kingdom (21%), Spain (3%), Switzerland (3%) | Asia (36%) | 2020-02-26 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **399** | 550 | 1068 | United Kingdom (66%), Peru (10%), Canada (6%), Belgium (3%), Italy (2%) | Europe (76%) | 2020-03-02 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **498** | 589 | 1119 | United Kingdom (50%), USA (38%), Switzerland (2%), Norway (2%), Canada (1%) | Europe (58%) | 2020-03-05 to 2020-10-06 | **Active** | TTGCGGGTGC | G |
+| **768** | 774 | 1356 | USA (96%), Canada (2%), Australia (0%), New Zealand (0%), Nigeria (0%) | North America (99%) | 2020-03-09 to 2020-10-07 | **Active** | TTGCGTGTGC | GH |
+| **800** | 344 | 563 | Saudi Arabia (45%), India (21%), United Kingdom (18%), Norway (5%), Indonesia (3%) | Asia (71%) | 2020-02-03 to 2020-10-05 | **Active** | TTGCGTGTGC | GH |
+| **1455** | 72 | 114 | United Kingdom (86%), Ireland (8%), Norway (4%), Italy (2%), Romania (1%) | Europe (100%) | 2020-03-16 to 2020-10-05 | **Active** | TTGCGGGTGC | G |
+| **3859** | 97 | 280 | United Kingdom (98%), Norway (2%), Israel (0%) | Europe (100%) | 2020-04-13 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **5447** | 577 | 948 | United Kingdom (52%), India (25%), Saudi Arabia (5%), Canada (5%), Norway (2%) | Europe (58%) | 2020-02-16 to 2020-10-11 | **Active** | TTGCGTGTGC | GH |
+| **17516** | 39 | 164 | Australia (100%) | Oceania (100%) | 2020-07-13 to 2020-10-12 | **Active** | TTGCGGGTAC | GR |
+| **18372** | 82 | 125 | United Kingdom (74%), USA (20%), Russia (2%), Spain (1%), Belgium (1%) | Europe (78%) | 2020-03-22 to 2020-10-05 | **Active** | TTGCGGGTAC | GR |
+| **20544** | 37 | 106 | United Kingdom (100%) | Europe (100%) | 2020-05-05 to 2020-10-05 | **Active** | TTGCGGGTAC | GR |
+| **21976** | 84 | 134 | United Kingdom (48%), South Africa (45%), India (6%), USA (1%) | Europe (48%) | 2020-05-21 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **22279** | 54 | 117 | United Kingdom (99%), USA (1%) | Europe (99%) | 2020-06-09 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **23107** | 67 | 173 | United Kingdom (100%) | Europe (100%) | 2020-06-15 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **25545** | 121 | 236 | United Kingdom (74%), Belgium (19%), Netherlands (3%), France (2%), Germany (1%) | Europe (100%) | 2020-07-09 to 2020-10-06 | **Active** | TTGCGGGTGC | G |
+| **25780** | 22 | 60 | United Kingdom (95%), New Zealand (3%), USA (2%) | Europe (95%) | 2020-04-06 to 2020-10-05 | **Active** | TTGCGGGTAC | GR |
+| **26377** | 377 | 860 | United Kingdom (92%), Ireland (3%), Netherlands (2%), Spain (2%), Latvia (1%) | Europe (100%) | 2020-07-18 to 2020-10-13 | **Active** | TTGCGGGTGT | GV |
+| **26711** | 269 | 669 | United Kingdom (100%) | Europe (100%) | 2020-07-21 to 2020-10-08 | **Active** | TTGCTGGTAC | GR |
+| **26754** | 248 | 519 | United Kingdom (85%), Norway (11%), Netherlands (1%), Spain (1%), France (1%) | Europe (100%) | 2020-06-20 to 2020-10-11 | **Active** | TTGCGGGTGT | GV |
+| **27413** | 64 | 245 | United Kingdom (100%) | Europe (100%) | 2020-07-28 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **27693** | 487 | 1296 | United Kingdom (99%), Netherlands (0%), Spain (0%), Ireland (0%), Hong Kong (0%) | Europe (100%) | 2020-07-31 to 2020-10-10 | **Active** | TTGCGGGTGT | GV |
+| **27700** | 96 | 210 | United Kingdom (99%), Norway (1%) | Europe (100%) | 2020-07-31 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **27950** | 78 | 198 | United Kingdom (97%), Netherlands (2%), New Zealand (1%) | Europe (99%) | 2020-08-04 to 2020-10-08 | **Active** | TTGCGGGTGT | GV |
+| **28012** | 83 | 222 | United Kingdom (100%) | Europe (100%) | 2020-08-04 to 2020-10-06 | **Active** | TTGCGGGTGT | GV |
 | **28179** | 253 | 632 | United Kingdom (100%) | Europe (100%) | 2020-06-02 to 2020-10-10 | **Active** | TTGCGGGTAC | GR |
-| **28445** | 104 | 309 | United Kingdom (89%), Norway (9%), Netherlands (1%), France (0%), Sweden (0%) | Europe (100%) | 2020-08-08 to 2020-10-08 | **Active** | TTGCGTGTGC | GH |
-| **28513** | 46 | 120 | United Kingdom (99%), Australia (1%) | Europe (99%) | 2020-03-24 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **28786** | 73 | 165 | United Kingdom (100%) | Europe (100%) | 2020-08-11 to 2020-10-08 | **Active** | TTGCGGGTGC | G |
-| **29310** | 24 | 71 | United Kingdom (99%), Ireland (1%) | Europe (100%) | 2020-08-17 to 2020-10-07 | **Active** | TTGCGGGTGT | GV |
-| **29516** | 37 | 117 | United Kingdom (99%), Netherlands (1%) | Europe (100%) | 2020-08-19 to 2020-10-05 | **Active** | TTGCGGGTAC | GR |
-| **29952** | 39 | 107 | United Kingdom (100%) | Europe (100%) | 2020-06-08 to 2020-10-06 | **Active** | TTGCGGGTGC | G |
-| **30174** | 61 | 140 | United Kingdom (98%), Bangladesh (1%), Russia (1%) | Europe (99%) | 2020-07-10 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **30362** | 29 | 116 | United Kingdom (100%) | Europe (100%) | 2020-08-27 to 2020-10-10 | **Active** | TTGCGGGTGT | GV |
-| **30431** | 30 | 65 | United Kingdom (100%) | Europe (100%) | 2020-08-28 to 2020-10-06 | **Active** | TTGCGGGTAT | Not Applicaple |
-| **30498** | 29 | 85 | United Kingdom (100%) | Europe (100%) | 2020-08-28 to 2020-10-06 | **Active** | TTGCTGGTAC | Not Applicaple |
-| **30499** | 37 | 93 | United Kingdom (100%) | Europe (100%) | 2020-07-17 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
-| **31179** | 216 | 606 | United Kingdom (100%), Spain (0%) | Europe (100%) | 2020-09-01 to 2020-10-09 | **Active** | TTGCGGGTGT | GV |
-| **31744** | 78 | 177 | United Kingdom (100%) | Europe (100%) | 2020-09-08 to 2020-10-09 | **Active** | TTGCGGGTGT | GV |
-| **31942** | 79 | 236 | United Kingdom (100%) | Europe (100%) | 2020-09-02 to 2020-10-10 | **Active** | TTGCGGGTGT | GV |
+| **28445** | 129 | 338 | United Kingdom (90%), Norway (8%), Netherlands (1%), France (1%), Sweden (0%) | Europe (100%) | 2020-08-08 to 2020-10-08 | **Active** | TTGCGTGTGC | GH |
+| **28513** | 47 | 121 | United Kingdom (99%), Australia (1%) | Europe (99%) | 2020-03-24 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **28786** | 83 | 176 | United Kingdom (100%) | Europe (100%) | 2020-08-11 to 2020-10-08 | **Active** | TTGCGGGTGC | G |
+| **29259** | 72 | 173 | United Kingdom (93%), Netherlands (7%) | Europe (100%) | 2020-08-05 to 2020-10-06 | **Active** | TTGCGGGTGT | GV |
+| **29310** | 27 | 76 | United Kingdom (99%), Ireland (1%) | Europe (100%) | 2020-08-17 to 2020-10-07 | **Active** | TTGCGGGTGT | GV |
+| **29423** | 71 | 138 | United Kingdom (99%), Switzerland (1%) | Europe (100%) | 2020-05-19 to 2020-10-06 | **Active** | TTGCGGGTGC | G |
+| **29516** | 46 | 128 | United Kingdom (98%), Netherlands (2%) | Europe (100%) | 2020-08-19 to 2020-10-05 | **Active** | TTGCGGGTAC | GR |
+| **29952** | 48 | 119 | United Kingdom (100%) | Europe (100%) | 2020-06-08 to 2020-10-06 | **Active** | TTGCGGGTGC | G |
+| **30174** | 72 | 156 | United Kingdom (90%), Russia (9%), Bangladesh (1%) | Europe (99%) | 2020-06-07 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **30362** | 30 | 117 | United Kingdom (100%) | Europe (100%) | 2020-08-27 to 2020-10-10 | **Active** | TTGCGGGTGT | GV |
+| **30431** | 33 | 68 | United Kingdom (100%) | Europe (100%) | 2020-08-28 to 2020-10-06 | **Active** | TTGCGGGTAT | GR |
+| **30498** | 29 | 85 | United Kingdom (100%) | Europe (100%) | 2020-08-28 to 2020-10-06 | **Active** | TTGCTGGTAC | GR |
+| **30499** | 44 | 106 | United Kingdom (100%) | Europe (100%) | 2020-07-17 to 2020-10-06 | **Active** | TTGCGGGTAC | GR |
+| **31179** | 228 | 618 | United Kingdom (100%), Spain (0%) | Europe (100%) | 2020-09-01 to 2020-10-10 | **Active** | TTGCGGGTGT | GV |
+| **31744** | 83 | 182 | United Kingdom (100%) | Europe (100%) | 2020-09-08 to 2020-10-09 | **Active** | TTGCGGGTGT | GV |
+| **31942** | 88 | 245 | United Kingdom (100%) | Europe (100%) | 2020-09-02 to 2020-10-10 | **Active** | TTGCGGGTGT | GV |
 
 ***The ten defining SNPs in order (C241,C3037,A23403,C8782,G11083,G25563,G26144,T28144,G28882,C22227)**
 
