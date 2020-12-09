@@ -4,7 +4,7 @@
 # GNUVID
 **G**ene **N**ovelty **U**nit-based **V**irus **ID**entification for **SARS-CoV-2**
 ## Introduction
-GNUVID (GNU-based Virus IDentification) is a Python3 program. It ranks CDS nucleotide sequences in a genome fna file based on the number of observed exact CDS nucleotide matches in a public or private database. It was created to type SARS-CoV-2 genomes using a whole genome multilocus sequence typing (wgMLST) approach. The 10 ORFs (ORF1ab, S, ORF3a, E, M, ORF6, ORF7a, ORF8, N, ORF10) in SARS-CoV-2 are used for typing. It automatically assigns allele numbers to each of the 10 ORFs and a Sequence Type (ST) to each genome, based on its profile of unique gene allele sequences. It is based on our recent panallelome approach implemented in [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU). It can type your query genome in seconds. As of GNUVID 1.5, GNUVID_Predict.py is a speedy algorithm for assigning Clonal Complexes to new genomes, which uses a Machine Learning Random Forest Classifier.<br/>
+GNUVID (GNU-based Virus IDentification) is a Python3 program. It ranks CDS nucleotide sequences in a genome fna file based on the number of observed exact CDS nucleotide matches in a public or private database. It was created to type SARS-CoV-2 genomes using a whole genome multilocus sequence typing (wgMLST) approach. The 10 ORFs (ORF1ab, S, ORF3a, E, M, ORF6, ORF7a, ORF8, N, ORF10) in SARS-CoV-2 are used for typing. It automatically assigns allele numbers to each of the 10 ORFs and a Sequence Type (ST) to each genome, based on its profile of unique gene allele sequences. It is based on our recent panallelome approach implemented in [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU). It can type your query genome in seconds. As of GNUVID v2.0, GNUVID_Predict.py is a speedy algorithm for assigning Clonal Complexes to new genomes, which uses a Machine Learning Random Forest Classifier.<br/>
 
 A pre-print of the paper **Rapid whole genome sequence typing reveals multiple waves of SARS-CoV-2 spread** can be found here: https://www.biorxiv.org/content/10.1101/2020.06.08.139055v1
 
@@ -113,7 +113,7 @@ If you need it permanently, you can add this last line to your .bashrc or .bash_
 
 ### Test
 * Type GNUVID_Predict.py -h and it should output help screen.
-* Type GNUVID_Predict.py -v and you should see an output like GNUVID.py 1.5.
+* Type GNUVID_Predict.py -v and you should see an output like GNUVID.py v2.0.
 
 ## Usage for GNUVID_Predict.py
 ### Input
@@ -131,14 +131,14 @@ $GNUVID_Predict.py -i -o new_genomes_GNUVID new_genomes.fasta
 ```
 usage: GNUVID_Predict.py [-h] [-o OUTPUT_FOLDER] [-i] [-f] [-q] [-v] query_fna
 
-GNUVID v1.5 uses the natural variation in public genomes of SARS-CoV-2 to rank
+GNUVID v2.0 uses the natural variation in public genomes of SARS-CoV-2 to rank
 gene sequences based on the number of observed exact matches (the GNU score)
 in all known genomes of SARS-CoV-2. It assigns a sequence type to each genome
 based on its profile of unique gene allele sequences. It can type (using whole
 genome multilocus sequence typing; wgMLST) your query genome in seconds.
 GNUVID_Predict is a speedy algorithm for assigning Clonal Complexes to new
 genomes, which uses machine learning Random Forest Classifier, implemented as
-of GNUVID 1.5.
+of GNUVID v2.0.
 
 positional arguments:
   query_fna             Query Whole Genome Nucleotide FASTA file to analyze

@@ -64,12 +64,12 @@ START_TIME = time.time()
 ########################################
 PARSER = argparse.ArgumentParser(
     prog="GNUVID_Predict.py",
-    description="GNUVID v1.5 uses the natural variation in public genomes of SARS-CoV-2 to \
+    description="GNUVID v2.0 uses the natural variation in public genomes of SARS-CoV-2 to \
     rank gene sequences based on the number of observed exact matches (the GNU score) \
     in all known genomes of SARS-CoV-2. It assigns a sequence type to each genome based on \
     its profile of unique gene allele sequences. It can type (using whole genome multilocus sequence typing; wgMLST) \
     your query genome in seconds. GNUVID_Predict is a speedy algorithm for assigning Clonal Complexes \
-    to new genomes, which uses machine learning Random Forest Classifier, implemented as of GNUVID 1.5.",
+    to new genomes, which uses machine learning Random Forest Classifier, implemented as of GNUVID v2.0.",
 )
 PARSER.add_argument(
     "-o",
@@ -102,7 +102,7 @@ PARSER.add_argument(
     "--version",
     help="print version and exit",
     action="version",
-    version="%(prog)s 1.5",
+    version="%(prog)s 2.0",
 )
 PARSER.add_argument(
     "query_fna", type=str, help="Query Whole Genome Nucleotide FASTA file to analyze (.fna)"
@@ -552,7 +552,7 @@ for y in sorted_final_results:
     fo.write('{},{},{}\n'.format(seqId,Classifier_version,','.join(y_results)))
 logging.info("Finished prediction in --- {:.3f} seconds ---".format(time.time() - START_TIME))
 logging.info("Typed the query isolate/s and wrote {}".format(output_file.rsplit(OS_SEPARATOR,1)[-1]))
-logging.info("""Thanks for using GNUVID v1.5, I hope you found it useful.
+logging.info("""Thanks for using GNUVID v2.0, I hope you found it useful.
 References:
 WhatsGNU 'Moustafa AM and Planet PJ 2020, Genome Biology;21:58'.
 MAFFT version 7 'Katoh and Standley 2013, Molecular Biology and Evolution;30:772-780'.
