@@ -196,7 +196,7 @@ logging.basicConfig(
     handlers=LOG_LIST)
 logging.critical("GNUVID_Predict is an alternative speedy algorithm for assigning \
 Clonal Complexes to new genomes, which uses machine learning Random Forest Classifier,\
- implemented as of GNUVID 1.5. Please use it for prediction! ".)
+ implemented as of GNUVID 1.5. Please use it for prediction!")
 if ARGS.force:
     logging.info("overwrote results folder({})".format(RESULTS_FOLDER))
 else:
