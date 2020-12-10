@@ -1,8 +1,8 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://travis-ci.org/ahmedmagds/GNUVID.svg?branch=master)](https://travis-ci.org/ahmedmagds/GNUVID)
-[![Anaconda_cloud](https://anaconda.org/bioconda/gnuvid/badges/version.svg)
-[![Anaconda_downloads](https://anaconda.org/bioconda/gnuvid/badges/downloads.svg)
-[![Anaconda_install](https://anaconda.org/bioconda/gnuvid/badges/installer/conda.svg)
+[![Anaconda_cloud](https://anaconda.org/bioconda/gnuvid/badges/version.svg)](https://anaconda.org/bioconda/gnuvid)
+[![Anaconda_downloads](https://anaconda.org/bioconda/gnuvid/badges/downloads.svg)](https://anaconda.org/bioconda/gnuvid)
+[![Anaconda_install](https://anaconda.org/bioconda/gnuvid/badges/installer/conda.svg)](https://anaconda.org/bioconda/gnuvid)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3927063.svg)](https://doi.org/10.5281/zenodo.4313855)
 # GNUVID
 **G**ene **N**ovelty **U**nit-based **V**irus **ID**entification for **SARS-CoV-2**
