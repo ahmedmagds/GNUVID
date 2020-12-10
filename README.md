@@ -18,7 +18,7 @@ https://github.com/ahmedmagds/GNUVID/blob/master/GISAID_acknowledgement_table_20
 ## Install and use as simple as
 Make a new environment and install GNUVID in it
 ```
-conda create -n GNUVID -c bioconda gnuvid mafft
+conda create -n GNUVID -c bioconda gnuvid
 conda activate GNUVID
 ```
 
@@ -113,7 +113,7 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 If you use Conda you can use the Bioconda channel to install it in the conda base:
 Make a new environment and install GNUVID in it
 ```
-conda create -n GNUVID -c bioconda gnuvid mafft
+conda create -n GNUVID -c bioconda gnuvid
 conda activate GNUVID
 ```
 The 'conda activate' command is needed to activate the GNUVID environment each time you want to use the tool.<br/>
