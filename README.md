@@ -15,6 +15,13 @@ A table of acknowledgements for the 69686 GISAID SARS-CoV-2 sequences used here 
 https://github.com/ahmedmagds/GNUVID/blob/master/GISAID_hcov-19_acknowledgement_table_2020_06_17_00.xls
 https://github.com/ahmedmagds/GNUVID/blob/master/GISAID_acknowledgement_table_2020_10_22_16-merged.pdf
 
+## Install and use as simple as
+Make a new environment and install GNUVID in it
+```
+conda create -n GNUVID -c bioconda gnuvid mafft
+conda activate GNUVID
+```
+
 ## Globally circulating clonal complexes as  of 2020-10-20:
 
 - 69686 GISAID sequences have been included in this analysis.
@@ -102,6 +109,20 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 * [MAFFT](https://mafft.cbrc.jp/alignment/software/source.html)
 * [pandas](https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html)
 * [scikit-learn](https://scikit-learn.org/stable/install.html)
+### Bioconda (**recommended**)
+If you use Conda you can use the Bioconda channel to install it in the conda base:
+Make a new environment and install GNUVID in it
+```
+conda create -n GNUVID -c bioconda gnuvid mafft
+conda activate GNUVID
+```
+The 'conda activate' command is needed to activate the GNUVID environment each time you want to use the tool.<br/>
+**If you do not have Miniconda or Anaconda installed already, you can install one of them from:**
+1. [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
+2. [Anaconda](https://www.anaconda.com/distribution/)
+
+**OR**
+
 ### Clone the Github repository
 GNUVID is a command-line application written in Python3. Simply download and use! **You will have to install dependencies!**
 ```
@@ -113,7 +134,6 @@ $pwd
 $export PATH=$PATH:/path/to/folder/having/GNUVID/bin
 ```
 If you need it permanently, you can add this last line to your .bashrc or .bash_profile.
-
 ### Test
 * Type GNUVID_Predict.py -h and it should output help screen.
 * Type GNUVID_Predict.py -v and you should see an output like GNUVID.py v2.0.
