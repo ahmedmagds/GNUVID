@@ -41,9 +41,9 @@ conda activate GNUVID
 - CC70, CC26, CC343, CC439, CC927, CC1434, CC11290, CC13202, CC13669 and CC17244 have now been called CC550, CC750, CC9999, CC2649, CC1179, CC2175, CC18372, CC13208, CC12995 and CC13413 respectively.
 
 ## GNUVID now assigns the three new variants:
-- CC81085 represents the Brazilian P.1 lineage (a.k.a. 20J/501Y.V3).
-- CC71014 represents the South African B.1.351 lineage (a.k.a. 20H/501Y.V2).
-- 10 CCs represent the UK B.1.1.7 lineage (a.k.a. 20I/501Y.V1 Variant of Concern (VOC) 202012/01). (10 CCs: 46649, 45062, 49676, 54949, 54452, 58534, 57630, 66559, 62415 and 67441).
+- **CC81085 represents the Brazilian P.1 lineage (a.k.a. 20J/501Y.V3).**
+- **CC71014 represents the South African B.1.351 lineage (a.k.a. 20H/501Y.V2).**
+- **10 CCs represent the UK B.1.1.7 lineage (a.k.a. 20I/501Y.V1 Variant of Concern (VOC) 202012/01). (10 CCs: 46649, 45062, 49676, 54949, 54452, 58534, 57630, 66559, 62415 and 67441).**
 
 **Minimum spanning tree of the 81097 STs showing the 406 CCs**
 
