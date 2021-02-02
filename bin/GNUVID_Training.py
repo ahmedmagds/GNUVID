@@ -135,7 +135,7 @@ for name, model in models:
     OUTPUT_OBJECT.write("precision: " + str(precision_score(y_test, y_pred, average="macro"))+ '\n')
     OUTPUT_OBJECT.write("recall: " + str(recall_score(y_test, y_pred, average="macro"))+ '\n')
     name_no_space = name.replace(' ','')
-    model_joblib = "GNUVIDML_{}.joblib".format(name_no_space)
+    model_joblib = "GNUVIDML_{}_{}.joblib".format(name_no_space,TIMESTR)
     joblib.dump(model, model_joblib, compress=9)
     print(("Finished {} in --- {:.3f} seconds ---".format(name,time.time() - START_TIME)))
     OUTPUT_OBJECT.write("Finished {} in --- {:.3f} seconds ---\n###########################\n".format(name,time.time() - START_TIME))

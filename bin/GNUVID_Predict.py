@@ -64,7 +64,7 @@ START_TIME = time.time()
 ########################################
 PARSER = argparse.ArgumentParser(
     prog="GNUVID_Predict.py",
-    description="GNUVID v2.0 uses the natural variation in public genomes of SARS-CoV-2 to \
+    description="GNUVID v2.1 uses the natural variation in public genomes of SARS-CoV-2 to \
     rank gene sequences based on the number of observed exact matches (the GNU score) \
     in all known genomes of SARS-CoV-2. It assigns a sequence type to each genome based on \
     its profile of unique gene allele sequences. It can type (using whole genome multilocus sequence typing; wgMLST) \
@@ -102,7 +102,7 @@ PARSER.add_argument(
     "--version",
     help="print version and exit",
     action="version",
-    version="%(prog)s 2.0",
+    version="%(prog)s 2.1",
 )
 PARSER.add_argument(
     "query_fna", type=str, help="Query Whole Genome Nucleotide FASTA file to analyze (.fna)"
@@ -112,7 +112,7 @@ if len(sys.argv) == 1:
     sys.exit(0)
 ARGS = PARSER.parse_args()
 OS_SEPARATOR = os.sep
-Classifier_version = '10/20/2020'
+Classifier_version = '01/06/2021'
 #########blast check##############
 try:
     GETVERSION = subprocess.Popen("blastn -version", shell=True, stdout=subprocess.PIPE).stdout
@@ -166,14 +166,17 @@ seq_file = ARGS.query_fna#sequence_file
 SEQ_OBJECT = open(seq_file,'r')
 Script_Path = os.path.realpath(__file__)
 DB_Folder_Path = os.path.join(Script_Path.rsplit(OS_SEPARATOR,2)[0], "db")
-VCF_file = os.path.join(DB_Folder_Path,'SNPs_15136_OCT.txt') # has the nucleotide(feature) positions
+VCF_file = os.path.join(DB_Folder_Path,'SNPs_20188_Jan2021.txt') # has the nucleotide(feature) positions
 VCF_OBJECT = open(VCF_file,'r')
-DT_model = os.path.join(DB_Folder_Path,'GNUVID_10202020_RandomForest.joblib')#ML model
-COMP_DB_file = os.path.join(DB_Folder_Path,'GNUVID_10202020_comp_db.joblib')#compressed DB
-strains_report_file = os.path.join(DB_Folder_Path,'GNUVID_10202020_DB_isolates_report.txt')
+DT_model = os.path.join(DB_Folder_Path,'GNUVID_01062021_RandomForest.joblib')#ML model
+COMP_DB_file = os.path.join(DB_Folder_Path,'GNUVID_01062021_comp_db.joblib')#compressed DB
+strains_report_file = os.path.join(DB_Folder_Path,'GNUVID_01062021_DB_isolates_report.txt')
 Ref_CDS = os.path.join(DB_Folder_Path,'MN908947.3_cds.fna')
 Ref_WG = os.path.join(DB_Folder_Path,'MN908947.3.fasta')
 ########################################
+VOC_dict = {81085:'P.1',71014:'B.1.351', 46649:'B.1.1.7', 45062:'B.1.1.7',
+49676:'B.1.1.7', 54949:'B.1.1.7', 54452:'B.1.1.7', 58534:'B.1.1.7',
+57630:'B.1.1.7', 66559:'B.1.1.7', 62415:'B.1.1.7', 67441:'B.1.1.7'}
 features_list = []
 postitions_list = []
 for line in VCF_OBJECT:
@@ -224,7 +227,7 @@ for line in report_object:
     ST_number = line_list[ST_index]
     Alleles_profile = '_'.join(line_list[ORF1ab_index:ST_index])
     ST_allele_Dict[Alleles_profile] = ST_number
-    if (len(ST_date) > 7) and (ST_date.split('-')[0] in ['2020', '2019']):
+    if (len(ST_date) > 7) and (ST_date.split('-')[0] in ['2021','2020', '2019']):
         if len(ST_date) < 10:
             ST_date_lst = ST_date.split('-')
             if len(ST_date_lst[1]) < 2:
@@ -449,10 +452,14 @@ for index in range(1,len(alleles),1):
         ST_1st_date = ST_data[0][0]
         country_1st = ST_data[0][1]
         exact_CC = ST_data[0][2]
+        if int(exact_CC) in VOC_dict:
+            VOC = VOC_dict[int(exact_CC)]
+        else:
+            VOC = 'No'
         ST_last_date = ST_data[-1][0]
         country_last = ST_data[-1][1]
         p_value = 'Exact'
-        results_data = [predict_ST,country_1st,ST_1st_date,ST_last_date,country_last,exact_CC, p_value]
+        results_data = [predict_ST,country_1st,ST_1st_date,ST_last_date,country_last,exact_CC, p_value, VOC]
         if exact_CC == 'NA':
             prediction_list.append(alleles[index])
         else:
@@ -533,10 +540,14 @@ if len(prediction_list) > 0:
                 maxIndex = i
         score = maxScore
         prediction = loaded_model.classes_[maxIndex]
-        if 'None' in prediction_list[index] or 'NA' in prediction_list[index]:
-            results_data2 = prediction_list[index] + ['None','NA','NA','NA','NA',prediction,str(score)] #exact_matching results
+        if int(prediction) in VOC_dict:
+            VOC = VOC_dict[int(prediction)]
         else:
-            results_data2 = prediction_list[index] + ['Novel','NA','NA','NA','NA',prediction,str(score)] #exact_matching results
+            VOC = 'No'
+        if 'None' in prediction_list[index] or 'NA' in prediction_list[index]:
+            results_data2 = prediction_list[index] + ['None','NA','NA','NA','NA',prediction,str(score),VOC] #exact_matching results
+        else:
+            results_data2 = prediction_list[index] + ['Novel','NA','NA','NA','NA',prediction,str(score),VOC] #exact_matching results
         prediction_results.append(results_data2)
 #########Convergence of exact matches and prediction##########
 final_results = [(int(x[0].split('__',1)[0]),x) for x in exact_match]
@@ -544,7 +555,7 @@ final_results.extend([(int(x[0].split('__',1)[0]),x) for x in prediction_results
 sorted_final_results = sorted(final_results, key=itemgetter(0))
 #####################OutPut###################
 fo = open(output_file,'w')
-new_details = ['Exact ST','First country seen','First date seen','Last country seen','Last date seen','CC','probability']
+new_details = ['Exact ST','First country seen','First date seen','Last country seen','Last date seen','CC','probability','Variant of Concern']
 fo.write("Sequence ID,GNUVID DB Version,{},{}\n".format(','.join(Genes),','.join(new_details)))
 for y in sorted_final_results:
     seqId = y[1][0].split('__',1)[-1]
@@ -552,7 +563,7 @@ for y in sorted_final_results:
     fo.write('{},{},{}\n'.format(seqId,Classifier_version,','.join(y_results)))
 logging.info("Finished prediction in --- {:.3f} seconds ---".format(time.time() - START_TIME))
 logging.info("Typed the query isolate/s and wrote {}".format(output_file.rsplit(OS_SEPARATOR,1)[-1]))
-logging.info("""Thanks for using GNUVID v2.0, I hope you found it useful.
+logging.info("""Thanks for using GNUVID v2.1, I hope you found it useful.
 References:
 WhatsGNU 'Moustafa AM and Planet PJ 2020, Genome Biology;21:58'.
 MAFFT version 7 'Katoh and Standley 2013, Molecular Biology and Evolution;30:772-780'.
@@ -563,6 +574,7 @@ GISAID 'Shu Y. and McCauley J. 2017, EuroSurveillance; 22:13'
 The reference genome MN908947 'Wu et al. 2020, Nature; 579:265–269'
 eBURST 'Feil et al. 2004, Journal of Bacteriology; 186:1518'
 goeBURST 'Francisco et al. 2009, BMC Bioinformatics; 10:152'
+minimap2 'Li H 2018, Bioinformatics; 34:18'
 PHYLOViZ 2.0 'Nascimento et al. 2017, Bioinformatics; 33:128-129'
 The manual is extensive and available to read at https://github.com/ahmedmagds/GNUVID
 If you have problems, please file at https://github.com/ahmedmagds/GNUVID/issues""")
