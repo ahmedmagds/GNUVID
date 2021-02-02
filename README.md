@@ -209,9 +209,9 @@ optional arguments:
 
 Sequence ID | GNUVID DB Version | ORF1ab | Surface_glycoprotein | ORF3a | Envelope_protein | Membrane_glycoprotein | ORF6 | ORF7a | ORF8 | Nucleocapsid_phosphoprotein | ORF10 | Exact ST | First Country seen | First date seen | Last country seen | Last date seen | CC | probability | Variant of Concern |
 ----------- | ----------------- | ------ | -------------------- | ----- | ---------------- | --------------------- | ---- | ----- | ---- | --------------------------- | ----- | -------- | ------------------ | --------------- | ----------------- | -------------- | -- | -----------  | ------------------ |
-isolate_x | 10/20/20 | 4 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 4 | China | 2019-12-30 | India | 2020-08-12 | 4 | Exact |
-isolate_y | 10/20/20 | Novel | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | Novel | NA | NA | NA | NA | 4 | 0.9 |
-isolate_z | 10/20/20 | None | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | None | NA | NA | NA | NA | 4 | 0.8 |
+isolate_x | 10/20/20 | 4 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 4 | China | 2019-12-30 | India | 2020-08-12 | 4 | Exact | P.1 |
+isolate_y | 10/20/20 | Novel | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | Novel | NA | NA | NA | NA | 4 | 0.9 | No |
+isolate_z | 10/20/20 | None | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | None | NA | NA | NA | NA | 4 | 0.8 | B.1.1.7 |
 
 * Column 1: Query Sequence name
 * Column 2: GNUVID Database version (results will vary as more genomes are added to the DB)
