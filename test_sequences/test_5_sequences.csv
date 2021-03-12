@@ -1,0 +1,6 @@
+Sequence ID,GNUVID DB Version,ORF1ab,Surface_glycoprotein,ORF3a,Envelope_protein,Membrane_glycoprotein,ORF6,ORF7a,ORF8,Nucleocapsid_phosphoprotein,ORF10,Exact ST,First country seen,First date seen,Last country seen,Last date seen,CC,probability,Variant of Concern,Quality Check
+MW725581.1_|Severe_acute_respiratory_syndrome_coronavirus_2_isolate_SARS-CoV-2/human/USA/FL-BPHL-0962/2021__complete_genome,01/06/2021,Novel,Novel,1,1,1,1,1,2,Novel,1,Novel,NA,NA,NA,NA,70949,0.9,P.2,passed
+MW715070.1_|Severe_acute_respiratory_syndrome_coronavirus_2_isolate_SARS-CoV-2/human/ESP/HUD-68858407/2021__complete_genome,01/06/2021,Novel,Novel,1,1,1,1,1,1,Novel,1,Novel,NA,NA,NA,NA,297,0.6,No,passed
+MT007544.1_|Severe_acute_respiratory_syndrome_coronavirus_2_isolate_SARS-CoV-2/human/AUS/VIC01/2020__complete_genome,01/06/2021,Novel,24,4,1,1,1,1,1,1,1,Novel,NA,NA,NA,NA,550,0.7,No,passed
+NC_045512.2_|Severe_acute_respiratory_syndrome_coronavirus_2_isolate_Wuhan-Hu-1__complete_genome,01/06/2021,4,1,1,1,1,1,1,1,1,1,4,China,2019-12-30,2020-08-12,India,4,Exact,No,passed
+MN908947.3_|Severe_acute_respiratory_syndrome_coronavirus_2_isolate_Wuhan-Hu-1__complete_genome,01/06/2021,4,1,1,1,1,1,1,1,1,1,4,China,2019-12-30,2020-08-12,India,4,Exact,No,passed
