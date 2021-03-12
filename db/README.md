@@ -25,9 +25,11 @@ The STs identified by GNUVID were grouped into larger taxonomic units, clonal co
 
 The "Most common 5 countries" and "Most common Region" columns show the five countries and the region, respectively, with the most sequences from each Clonal Complex. Starting from the DB update (01/06/2021), the GISAID clades are reported for each CC for easier correlation between the two systems.
 
-**GNUVID now assigns the three new variants:**
+**GNUVID now predicts the five new variants:**
 - Brazilian P.1 lineage (a.k.a. 20J/501Y.V3).
+- Brazilian P.2 lineage.
 - South African B.1.351 lineage (a.k.a. 20H/501Y.V2).
+- The Californian B.1.429 lineage (a.k.a. CAL.20C).
 - UK B.1.1.7 lineage (a.k.a. 20I/501Y.V1 Variant of Concern (VOC) 202012/01).
 
 
@@ -352,7 +354,7 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | 44323 | 29 | 36 | Czech Republic (50%), United Kingdom (39%), Luxembourg (6%), Denmark (6%) | Europe (100%) | 2020-09-14 to 2020-11-15 | Inactive | Not_VOC (0) | G |
 | 44573 | 41 | 122 | Denmark (97%), United Kingdom (2%), Norway (1%) | Europe (100%) | 2020-09-14 to 2020-12-19 | Quiet | Not_VOC (0) | G |
 | **44837** | 82 | 139 | Luxembourg (51%), Belgium (37%), Netherlands (7%), United Kingdom (2%), Malaysia (1%) | Europe (99%) | 2020-08-01 to 2020-12-29 | **Active** | Not_VOC (0) | GV |
-| **45062** | 197 | 518 | United Kingdom (98%), Portugal (1%), France (0%), Finland (0%), Italy (0%) | Europe (100%) | 2020-09-20 to 2020-12-29 | **Active** | B.1.1.7 (100) | GR |
+| **45062** | 197 | 518 | United Kingdom (98%), Portugal (1%), France (0%), Finland (0%), Italy (0%) | Europe (100%) | 2020-09-20 to 2020-12-29 | **Active** | B.1.1.7 (100) | GRY |
 | 45072 | 140 | 300 | United Kingdom (99%), Singapore (0%), Luxembourg (0%), Ireland (0%) | Europe (100%) | 2020-09-20 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 45440 | 63 | 142 | United Kingdom (70%), Denmark (14%), Italy (13%), Luxembourg (3%), Australia (1%) | Europe (99%) | 2020-03-21 to 2020-12-22 | Quiet | Not_VOC (0) | GV |
 | 45452 | 69 | 124 | United Kingdom (81%), Ireland (10%), Netherlands (8%), Lithuania (1%) | Europe (100%) | 2020-09-09 to 2020-12-20 | Quiet | Not_VOC (0) | GV |
@@ -360,7 +362,7 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | 46070 | 91 | 145 | United Kingdom (28%), Denmark (23%), Switzerland (21%), Norway (10%), Belgium (4%) | Europe (99%) | 2020-07-06 to 2020-12-14 | Quiet | Not_VOC (0) | GR |
 | 46169 | 95 | 228 | United Kingdom (100%) | Europe (100%) | 2020-09-17 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 46434 | 39 | 55 | Denmark (100%) | Europe (100%) | 2020-09-28 to 2020-11-30 | Inactive | Not_VOC (0) | Not Applicaple |
-| **46649** | 1647 | 3429 | United Kingdom (96%), Denmark (2%), Portugal (0%), Italy (0%), Finland (0%) | Europe (100%) | 2020-09-30 to 2020-12-29 | **Active** | B.1.1.7 (100) | GR |
+| **46649** | 1647 | 3429 | United Kingdom (96%), Denmark (2%), Portugal (0%), Italy (0%), Finland (0%) | Europe (100%) | 2020-09-30 to 2020-12-29 | **Active** | B.1.1.7 (100) | GRY |
 | 46669 | 220 | 340 | Jordan (99%), Malaysia (0%), New Zealand (0%) | Asia (100%) | 2020-08-13 to 2020-11-27 | Inactive | Not_VOC (0) | GR |
 | 46855 | 40 | 77 | United Kingdom (100%) | Europe (100%) | 2020-09-20 to 2020-12-19 | Quiet | Not_VOC (0) | GV |
 | 46880 | 28 | 45 | United Kingdom (100%) | Europe (100%) | 2020-10-01 to 2020-12-09 | Quiet | Not_VOC (0) | GV |
@@ -376,7 +378,7 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | 49321 | 57 | 121 | United Kingdom (100%) | Europe (100%) | 2020-10-05 to 2020-12-20 | Quiet | Not_VOC (0) | GV |
 | 49395 | 38 | 78 | United Kingdom (100%) | Europe (100%) | 2020-10-09 to 2020-12-20 | Quiet | Not_VOC (0) | GR |
 | 49629 | 82 | 239 | Denmark (79%), United Kingdom (15%), Sweden (6%), Luxembourg (0%) | Europe (100%) | 2020-07-27 to 2020-12-22 | Quiet | Not_VOC (0) | GH |
-| **49676** | 123 | 351 | United Kingdom (99%), Netherlands (1%), Pakistan (0%) | Europe (100%) | 2020-10-11 to 2020-12-25 | **Active** | B.1.1.7 (100) | GR |
+| **49676** | 123 | 351 | United Kingdom (99%), Netherlands (1%), Pakistan (0%) | Europe (100%) | 2020-10-11 to 2020-12-25 | **Active** | B.1.1.7 (100) | GRY |
 | 49777 | 27 | 53 | Netherlands (26%), Switzerland (23%), Italy (19%), United Kingdom (15%), Germany (9%) | Europe (98%) | 2020-10-12 to 2020-12-20 | Quiet | Not_VOC (0) | GV |
 | 49798 | 60 | 207 | Denmark (100%) | Europe (100%) | 2020-10-05 to 2020-12-21 | Quiet | Not_VOC (0) | GH |
 | 49908 | 150 | 437 | Denmark (100%) | Europe (100%) | 2020-10-12 to 2020-12-21 | Quiet | Not_VOC (0) | G |
@@ -391,10 +393,10 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | 52752 | 32 | 62 | United Kingdom (97%), Denmark (3%) | Europe (100%) | 2020-09-21 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 52925 | 66 | 196 | Denmark (99%), United Kingdom (1%), Netherlands (1%) | Europe (100%) | 2020-04-09 to 2020-12-21 | Quiet | Not_VOC (0) | GR |
 | **53107** | 23 | 83 | Luxembourg (100%) | Europe (100%) | 2020-10-19 to 2020-12-27 | **Active** | Not_VOC (0) | G |
-| **54452** | 57 | 102 | United Kingdom (99%), Sweden (1%) | Europe (100%) | 2020-10-21 to 2020-12-28 | **Active** | B.1.1.7 (100) | GR |
+| **54452** | 57 | 102 | United Kingdom (99%), Sweden (1%) | Europe (100%) | 2020-10-21 to 2020-12-28 | **Active** | B.1.1.7 (100) | GRY |
 | 54556 | 33 | 51 | United Kingdom (100%) | Europe (100%) | 2020-10-01 to 2020-12-20 | Quiet | Not_VOC (0) | GV |
 | 54897 | 54 | 99 | United Kingdom (79%), Spain (7%), Italy (5%), France (4%), Switzerland (2%) | Europe (100%) | 2020-08-05 to 2020-12-20 | Quiet | Not_VOC (0) | GV |
-| 54949 | 36 | 92 | United Kingdom (92%), Netherlands (8%) | Europe (100%) | 2020-10-22 to 2020-12-22 | Quiet | B.1.1.7 (100) | GR |
+| 54949 | 36 | 92 | United Kingdom (92%), Netherlands (8%) | Europe (100%) | 2020-10-22 to 2020-12-22 | Quiet | B.1.1.7 (100) | GRY |
 | **55253** | 53 | 103 | Luxembourg (97%), South Korea (3%) | Europe (97%) | 2020-09-30 to 2020-12-29 | **Active** | Not_VOC (0) | GV |
 | 55421 | 43 | 88 | United Kingdom (100%) | Europe (100%) | 2020-10-19 to 2020-12-15 | Quiet | Not_VOC (0) | GV |
 | 55540 | 26 | 39 | Denmark (51%), United Kingdom (41%), Norway (5%), Sweden (3%) | Europe (100%) | 2020-09-30 to 2020-12-14 | Quiet | Not_VOC (0) | GR |
@@ -406,12 +408,12 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | 57107 | 32 | 96 | United Kingdom (100%) | Europe (100%) | 2020-10-27 to 2020-12-19 | Quiet | Not_VOC (0) | GV |
 | 57402 | 22 | 31 | USA (97%), Mexico (3%) | North America (100%) | 2020-06-24 to 2020-11-24 | Inactive | Not_VOC (0) | G |
 | 57578 | 25 | 50 | United Kingdom (88%), Luxembourg (6%), Denmark (4%), Portugal (2%) | Europe (100%) | 2020-09-19 to 2020-12-19 | Quiet | Not_VOC (0) | GV |
-| **57630** | 222 | 484 | United Kingdom (97%), France (1%), Australia (0%), Israel (0%), Portugal (0%) | Europe (99%) | 2020-10-29 to 2020-12-28 | **Active** | B.1.1.7 (100) | GR |
+| **57630** | 222 | 484 | United Kingdom (97%), France (1%), Australia (0%), Israel (0%), Portugal (0%) | Europe (99%) | 2020-10-29 to 2020-12-28 | **Active** | B.1.1.7 (100) | GRY |
 | 58222 | 50 | 63 | USA (98%), Australia (2%) | North America (98%) | 2020-08-17 to 2020-12-21 | Quiet | Not_VOC (0) | GH |
-| **58534** | 231 | 438 | United Kingdom (97%), France (1%), Portugal (1%), Denmark (0%), Israel (0%) | Europe (99%) | 2020-10-29 to 2020-12-28 | **Active** | B.1.1.7 (100) | GR |
+| **58534** | 231 | 438 | United Kingdom (97%), France (1%), Portugal (1%), Denmark (0%), Israel (0%) | Europe (99%) | 2020-10-29 to 2020-12-28 | **Active** | B.1.1.7 (100) | GRY |
 | 58550 | 78 | 138 | United Kingdom (53%), Denmark (33%), Australia (9%), Sweden (1%), New Zealand (1%) | Europe (89%) | 2020-06-17 to 2020-12-21 | Quiet | Not_VOC (0) | GH |
 | 59475 | 27 | 32 | USA (94%), United Kingdom (6%) | North America (94%) | 2020-10-16 to 2020-12-21 | Quiet | Not_VOC (0) | GR |
-| 62415 | 30 | 71 | United Kingdom (96%), USA (4%) | Europe (96%) | 2020-11-06 to 2020-12-21 | Quiet | B.1.1.7 (100) | GR |
+| 62415 | 30 | 71 | United Kingdom (96%), USA (4%) | Europe (96%) | 2020-11-06 to 2020-12-21 | Quiet | B.1.1.7 (100) | GRY |
 | 62730 | 78 | 162 | United Kingdom (100%) | Europe (100%) | 2020-10-06 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 63880 | 21 | 77 | Denmark (100%) | Europe (100%) | 2020-11-09 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 63884 | 111 | 354 | Denmark (85%), United Kingdom (15%) | Europe (100%) | 2020-11-02 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
@@ -419,8 +421,8 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | 64300 | 49 | 227 | Denmark (86%), United Kingdom (14%) | Europe (100%) | 2020-10-08 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 64726 | 42 | 52 | Portugal (85%), Luxembourg (8%), Netherlands (6%), France (2%) | Europe (100%) | 2020-10-20 to 2020-12-11 | Quiet | Not_VOC (0) | GV |
 | 65578 | 33 | 42 | Portugal (62%), Luxembourg (31%), United Kingdom (5%), Denmark (2%) | Europe (100%) | 2020-09-21 to 2020-12-02 | Inactive | Not_VOC (0) | GV |
-| **66559** | 42 | 94 | United Kingdom (98%), France (1%), Italy (1%) | Europe (100%) | 2020-11-08 to 2020-12-27 | **Active** | B.1.1.7 (100) | GR |
-| 67441 | 48 | 85 | United Kingdom (99%), Netherlands (1%) | Europe (100%) | 2020-11-08 to 2020-12-22 | Quiet | B.1.1.7 (100) | GR |
+| **66559** | 42 | 94 | United Kingdom (98%), France (1%), Italy (1%) | Europe (100%) | 2020-11-08 to 2020-12-27 | **Active** | B.1.1.7 (100) | GRY |
+| 67441 | 48 | 85 | United Kingdom (99%), Netherlands (1%) | Europe (100%) | 2020-11-08 to 2020-12-22 | Quiet | B.1.1.7 (100) | GRY |
 | 67728 | 22 | 160 | Denmark (98%), Netherlands (2%), United Kingdom (1%) | Europe (100%) | 2020-10-21 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 67741 | 101 | 250 | Denmark (96%), Finland (2%), Israel (2%) | Europe (98%) | 2020-11-09 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 67774 | 41 | 131 | Denmark (100%) | Europe (100%) | 2020-10-19 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
@@ -432,10 +434,10 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | 70352 | 24 | 72 | Denmark (100%) | Europe (100%) | 2020-11-23 to 2020-12-21 | Quiet | Not_VOC (0) | G |
 | 70458 | 282 | 783 | Denmark (100%) | Europe (100%) | 2020-11-09 to 2020-12-21 | Quiet | Not_VOC (0) | GV |
 | 70516 | 45 | 131 | Denmark (95%), United Kingdom (3%), Croatia (2%) | Europe (100%) | 2020-08-10 to 2020-12-21 | Quiet | Not_VOC (0) | GR |
-| 70949 | 69 | 92 | Brazil (86%), USA (5%), United Kingdom (5%), Canada (3%) | South America (86%) | 2020-10-26 to 2020-12-20 | Quiet | Not_VOC (0) | GR |
+| 70949 | 69 | 92 | Brazil (86%), USA (5%), United Kingdom (5%), Canada (3%) | South America (86%) | 2020-10-26 to 2020-12-20 | Quiet | P.2 (100) | GR |
 | **71014** | 35 | 35 | South Africa (89%), France (3%), United Kingdom (3%), Sweden (3%), South Korea (3%) | Africa (89%) | 2020-10-22 to 2020-12-26 | **Active** | B.1.351 (100) | GH |
 | 71629 | 39 | 61 | USA (100%) | North America (100%) | 2020-07-28 to 2020-12-15 | Quiet | Not_VOC (0) | GH |
-| **72860** | 71 | 87 | USA (97%), Australia (2%), New Zealand (1%) | North America (97%) | 2020-09-28 to 2020-12-27 | **Active** | Not_VOC (0) | GH |
+| **72860** | 71 | 87 | USA (97%), Australia (2%), New Zealand (1%) | North America (97%) | 2020-09-28 to 2020-12-27 | **Active** | B.1.429 (CAL.20C) (100) | GH |
 | 74258 | 23 | 29 | France (34%), United Kingdom (28%), Denmark (21%), Luxembourg (7%), Switzerland (7%) | Europe (100%) | 2020-09-26 to 2020-12-09 | Quiet | Not_VOC (0) | GH |
 | 74866 | 21 | 97 | Belgium (98%), United Kingdom (2%) | Europe (100%) | 2020-10-22 to 2020-12-14 | Quiet | Not_VOC (0) | GR |
 | **81085** | 15 | 22 | Brazil (77%), Japan (18%), USA (5%) | South America (77%) | 2020-12-04 to 2021-01-18 | **Active** | P.1 (100) | GR |

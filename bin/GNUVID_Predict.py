@@ -52,19 +52,11 @@ import subprocess
 from shutil import rmtree as rmt
 from operator import itemgetter
 from collections import defaultdict
-from sklearn.linear_model import LogisticRegression
-from sklearn.datasets import make_classification
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix, make_scorer
-from sklearn.model_selection import cross_val_score
 START_TIME = time.time()
 ########################################
 PARSER = argparse.ArgumentParser(
     prog="GNUVID_Predict.py",
-    description="GNUVID v2.1 uses the natural variation in public genomes of SARS-CoV-2 to \
+    description="GNUVID v2.2 uses the natural variation in public genomes of SARS-CoV-2 to \
     rank gene sequences based on the number of observed exact matches (the GNU score) \
     in all known genomes of SARS-CoV-2. It assigns a sequence type to each genome based on \
     its profile of unique gene allele sequences. It can type (using whole genome multilocus sequence typing; wgMLST) \
@@ -77,6 +69,31 @@ PARSER.add_argument(
     type=str,
     help="Output folder and prefix to be created for \
 results (default: timestamped GNUVID_results in the current directory)",
+)
+PARSER.add_argument(
+    "-m",
+    "--min_len",
+    type=int,
+    help="minimum sequence length [Default: 15000]",
+)
+PARSER.add_argument(
+    "-n",
+    "--n_max",
+    type=float,
+    help="maximum proportion of ambiguity (Ns) allowed [Default: 0.5]",
+)
+PARSER.add_argument(
+    "-b",
+    "--block_pred",
+    type=int,
+    help="prediction block size, good for limited memory [Default: 1000]",
+)
+PARSER.add_argument(
+    "-e",
+    "--exact_matching",
+    help="turn off exact matching (no allele will be identified for each  ORF)\
+    and only use machine learning prediction [default: False]",
+    action="store_true",
 )
 PARSER.add_argument(
     "-i",
@@ -111,8 +128,27 @@ if len(sys.argv) == 1:
     PARSER.print_help()
     sys.exit(0)
 ARGS = PARSER.parse_args()
+if bool(vars(ARGS)["individual"]) and bool(vars(ARGS)["exact_matching"]):
+    PARSER.exit(status=0, message="Error: You cannot use -i with -e\n")
 OS_SEPARATOR = os.sep
 Classifier_version = '01/06/2021'
+START_TIME0 = time.time()
+if ARGS.exact_matching:
+    e_matching = 0
+else:
+    e_matching = 1
+if ARGS.block_pred:
+    pred_block = ARGS.block_pred
+else:
+    pred_block = 1000
+if ARGS.min_len:
+    min_len = ARGS.min_len
+else:
+    min_len = 15000
+if ARGS.n_max:
+    n_max = ARGS.n_max
+else:
+    n_max = 0.5
 #########blast check##############
 try:
     GETVERSION = subprocess.Popen("blastn -version", shell=True, stdout=subprocess.PIPE).stdout
@@ -140,6 +176,7 @@ else:
     RESULTS_FOLDER = "GNUVID_results_{}{}".format(TIMESTR,OS_SEPARATOR)
 ###############Logging##################
 LOG_FILE = 'GNUVID_'+ TIMESTR
+log_name = "{0}{1}.log".format(RESULTS_FOLDER, LOG_FILE)
 if ARGS.quiet:
     LOG_LIST = [
         logging.FileHandler("{0}{1}.log".format(RESULTS_FOLDER, LOG_FILE))
@@ -174,7 +211,7 @@ strains_report_file = os.path.join(DB_Folder_Path,'GNUVID_01062021_DB_isolates_r
 Ref_CDS = os.path.join(DB_Folder_Path,'MN908947.3_cds.fna')
 Ref_WG = os.path.join(DB_Folder_Path,'MN908947.3.fasta')
 ########################################
-VOC_dict = {81085:'P.1',71014:'B.1.351', 46649:'B.1.1.7', 45062:'B.1.1.7',
+VOC_dict = {81085:'P.1',70949:'P.2',72860:'B.1.429 (CAL.20C)',71014:'B.1.351', 46649:'B.1.1.7', 45062:'B.1.1.7',
 49676:'B.1.1.7', 54949:'B.1.1.7', 54452:'B.1.1.7', 58534:'B.1.1.7',
 57630:'B.1.1.7', 66559:'B.1.1.7', 62415:'B.1.1.7', 67441:'B.1.1.7'}
 features_list = []
@@ -264,187 +301,187 @@ for allele in gene_all_alleles_dict:
         sorted_alleles_data[allele] = alleles_all_dates[allele]
     else:
         sorted_alleles_data[allele] = sorted(gene_all_alleles_dict[allele])
-#########################
+logging.info("Finished Parsing metadata in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+##########Quality Check###############
 START_TIME = time.time()
-COMP_DICT = joblib.load(COMP_DB_file)
 alleles = []
-alleles.append([])
+NA_list = 10 *['NA']
 REPORT_LIST = ["Query Gene","GNUVID DB Version","GNU score","length","sequence","Ns count","Allele number",
 "First date seen", "Last date seen"]
-NA_list = 10 *['NA']
+counter = 0
 SEQ_STR = ''
 query_dict = {}
-counter = 0
+order_list = []
+order_dict = {}
+failed_list  = []
 for line in SEQ_OBJECT:
     line = line.rstrip()
     if line.startswith(">"):
         if len(SEQ_STR) > 0:
             counter += 1
-            if ARGS.individual:
-                file_name = RESULTS_FOLDER + 'Genome' + str(counter) + '.csv'
-                QUERYFILE_IND = open(file_name,'w')
-                QUERYFILE_IND.write("{}\n".format(",".join(REPORT_LIST)))
-            counter_SEQ_INFO = str(counter) + '__' + SEQ_INFO
-            query_dict[counter_SEQ_INFO] = SEQ_STR
-            QUERYFILE_tmp = tempfile.NamedTemporaryFile(mode='w+')
-            QUERYFILE_tmp.write('>'+SEQ_INFO+'\n'+SEQ_STR)
-            QUERYFILE_tmp.seek(0)
-            blast_report_tmp = tempfile.NamedTemporaryFile(mode='w+')
-            blast_results = os.system("blastn -task blastn -query {} -subject {} -evalue 0.000001 -outfmt '6 qseqid sseq sstart send pident qcovs' -out {}".format(Ref_CDS,QUERYFILE_tmp.name, blast_report_tmp.name))
-            if blast_results == 0:
-                #####Blast results Parser#####
-                allele_tmp_lst = []
-                allele_tmp_lst.append(counter_SEQ_INFO)
-                try:
-                    blast_report_tmp.seek(0)
-                    Isolate_WG_dict = defaultdict(list)
-                    for line2 in blast_report_tmp:
-                        line_list = line2.rstrip().split("\t")
-                        hit_seq = line_list[1].replace('-','')
-                        hit_seq = hit_seq.upper()
-                        Isolate_WG_dict[line_list[0]].append(hit_seq)
-                    for gene_name in Genes:
-                        longest_seq = sorted(Isolate_WG_dict[gene_name], key=len, reverse=True)[0]
-                        try:
-                            ids_list = COMP_DICT[longest_seq]
-                            function, allele_number = ids_list[0].rsplit('_',1)
-                            allele_tmp_lst.append(allele_number)
-                            if ARGS.individual:
-                                SEQ_INFO_fn = SEQ_INFO + '_' + function
-                                fst_date = sorted_alleles_data[ids_list[0]][0]
-                                lst_date = sorted_alleles_data[ids_list[0]][-1]
-                                query_sequence_details = [SEQ_INFO_fn, Classifier_version,
-                                ids_list[-1],str(len(longest_seq)),longest_seq, '0',
-                                allele_number,fst_date, lst_date]
-                        except:
-                            Ns_count = 0
-                            for Nuc in longest_seq:
-                                if Nuc not in ['A','C','G','T']:
-                                    Ns_count += 1
-                            if Ns_count > 0:
-                                GNU_score = 'None'
-                                allele_number = 'None'
-                            else:
-                                GNU_score = '0'
-                                allele_number = 'Novel'
-                            allele_tmp_lst.append(allele_number)
-                            if ARGS.individual:
-                                SEQ_INFO_fn = SEQ_INFO + '_' + gene_name
-                                query_sequence_details = [SEQ_INFO_fn, Classifier_version,
-                                GNU_score, str(len(longest_seq)), longest_seq,
-                                str(Ns_count), allele_number, 'NA', 'NA']
-                        if ARGS.individual:
-                            QUERYFILE_IND.write("{}\n".format(
-                                    ",".join(query_sequence_details)))
-                    if ARGS.individual:
-                        QUERYFILE_IND.close()
-                    blast_report_tmp.close()
-                    alleles.append(allele_tmp_lst)
-                except:
-                    tmp_NA_lst = [counter_SEQ_INFO] + NA_list
-                    alleles.append(tmp_NA_lst)
-                    logging.critical(
-                        "Could not parse blastn results for {}".format(SEQ_INFO))
-                    if ARGS.individual:
-                        logging.critical(
-                            "Could not create Individual Output file for {}".format(SEQ_INFO))
+            if ' ' in SEQ_INFO:#fix spaces in fasta id
+                SEQ_INFO  =  SEQ_INFO.replace(' ','_')
+            if ',' in SEQ_INFO:#fix , in fasta id
+                SEQ_INFO  =  SEQ_INFO.replace(',','_')
+            if len(SEQ_STR) < min_len:
+                    SEQ_INFO = SEQ_INFO + f" failed (seq_len:{len(SEQ_STR)})"
+                    counter_SEQ_INFO = str(counter) + '__' + SEQ_INFO
+                    failed_list.append(counter_SEQ_INFO)
             else:
-                tmp_NA_lst = [counter_SEQ_INFO] + NA_list
-                alleles.append(tmp_NA_lst)
-                logging.critical(
-                    "Could not run blastn for {}".format(SEQ_INFO))
-                if ARGS.individual:
-                    logging.critical(
-                        "Could not create Individual Output file for {}".format(SEQ_INFO))
+                N_count = SEQ_STR.upper().count("N")
+                N_prop = round((N_count)/len(SEQ_STR), 2)
+                if N_prop > n_max:
+                    SEQ_INFO = SEQ_INFO + f" failed (N_prop:{N_prop})"
+                    counter_SEQ_INFO = str(counter) + '__' + SEQ_INFO
+                    failed_list.append(counter_SEQ_INFO)
+                else:
+                    counter_SEQ_INFO = str(counter) + '__' + SEQ_INFO
+                    query_dict[counter_SEQ_INFO] = SEQ_STR
+                    order_list.append(counter_SEQ_INFO)
+            #order_dict[SEQ_INFO] = counter_SEQ_INFO
             SEQ_STR = ""
         SEQ_INFO = line.lstrip('>')
-        #order_list.append(SEQ_INFO)
     else:
         SEQ_STR += line
 counter += 1
-if ARGS.individual:
-    file_name = RESULTS_FOLDER + 'Genome' + str(counter) + '.csv'
-    QUERYFILE_IND = open(file_name,'w')
-    QUERYFILE_IND.write("{}\n".format(",".join(REPORT_LIST)))
-counter_SEQ_INFO = str(counter) + '__' + SEQ_INFO
-query_dict[counter_SEQ_INFO] = SEQ_STR
-QUERYFILE_tmp = tempfile.NamedTemporaryFile(mode='w+')
-QUERYFILE_tmp.write('>'+SEQ_INFO+'\n'+SEQ_STR)
-QUERYFILE_tmp.seek(0)
-blast_report_tmp = tempfile.NamedTemporaryFile(mode='w+')
-blast_results = os.system("blastn -task blastn -query {} -subject {} -evalue 0.000001 -outfmt '6 qseqid sseq sstart send pident qcovs' -out {}".format(Ref_CDS,QUERYFILE_tmp.name, blast_report_tmp.name))
-if blast_results == 0:
-    #####Blast results Parser#####
-    allele_tmp_lst = []
-    allele_tmp_lst.append(counter_SEQ_INFO)
-    try:
-        blast_report_tmp.seek(0)
-        Isolate_WG_dict = defaultdict(list)
-        for line2 in blast_report_tmp:
-            line_list = line2.rstrip().split("\t")
-            hit_seq = line_list[1].replace('-','')
-            hit_seq = hit_seq.upper()
-            Isolate_WG_dict[line_list[0]].append(hit_seq)
-        for gene_name in Genes:
-            longest_seq = sorted(Isolate_WG_dict[gene_name], key=len, reverse=True)[0]
-            try:
-                ids_list = COMP_DICT[longest_seq]
-                function, allele_number = ids_list[0].rsplit('_',1)
-                allele_tmp_lst.append(allele_number)
-                if ARGS.individual:
-                    SEQ_INFO_fn = SEQ_INFO + '_' + function
-                    fst_date = sorted_alleles_data[ids_list[0]][0]
-                    lst_date = sorted_alleles_data[ids_list[0]][-1]
-                    query_sequence_details = [SEQ_INFO_fn, Classifier_version,
-                    ids_list[-1],str(len(longest_seq)),longest_seq, '0',
-                    allele_number,fst_date, lst_date]
-            except:
-                Ns_count = 0
-                for Nuc in longest_seq:
-                    if Nuc not in ['A','C','G','T']:
-                        Ns_count += 1
-                if Ns_count > 0:
-                    GNU_score = 'None'
-                    allele_number = 'None'
-                else:
-                    GNU_score = '0'
-                    allele_number = 'Novel'
-                allele_tmp_lst.append(allele_number)
-                if ARGS.individual:
-                    SEQ_INFO_fn = SEQ_INFO + '_' + gene_name
-                    query_sequence_details = [SEQ_INFO_fn, Classifier_version,
-                    GNU_score, str(len(longest_seq)), longest_seq,
-                    str(Ns_count), allele_number, 'NA', 'NA']
-            if ARGS.individual:
-                QUERYFILE_IND.write("{}\n".format(
-                        ",".join(query_sequence_details)))
-        if ARGS.individual:
-            QUERYFILE_IND.close()
-        blast_report_tmp.close()
-        alleles.append(allele_tmp_lst)
-    except:
-        tmp_NA_lst = [counter_SEQ_INFO] + NA_list
-        alleles.append(tmp_NA_lst)
-        logging.critical(
-            "Could not parse blastn results for {}".format(SEQ_INFO))
-        if ARGS.individual:
-            logging.critical(
-                "Could not create Individual Output file for {}".format(SEQ_INFO))
+if ' ' in SEQ_INFO:#fix spaces in fasta id
+    SEQ_INFO  =  SEQ_INFO.replace(' ','_')
+if ',' in SEQ_INFO:#fix , in fasta id
+    SEQ_INFO  =  SEQ_INFO.replace(',','_')
+if len(SEQ_STR) < min_len:
+        SEQ_INFO = SEQ_INFO + f" failed (seq_len:{len(SEQ_STR)})"
+        counter_SEQ_INFO = str(counter) + '__' + SEQ_INFO
+        failed_list.append(counter_SEQ_INFO)
 else:
-    tmp_NA_lst = [counter_SEQ_INFO] + NA_list
-    alleles.append(tmp_NA_lst)
-    logging.critical(
-        "Could not run blastn for {}".format(SEQ_INFO))
-    if ARGS.individual:
-        logging.critical(
-            "Could not create Individual Output file for {}".format(SEQ_INFO))
+    N_count = SEQ_STR.upper().count("N")
+    N_prop = round((N_count)/len(SEQ_STR), 2)
+    if N_prop > n_max:
+        SEQ_INFO = SEQ_INFO + f" failed (N_prop:{N_prop})"
+        counter_SEQ_INFO = str(counter) + '__' + SEQ_INFO
+        failed_list.append(counter_SEQ_INFO)
+    else:
+        counter_SEQ_INFO = str(counter) + '__' + SEQ_INFO
+        query_dict[counter_SEQ_INFO] = SEQ_STR
+        order_list.append(counter_SEQ_INFO)
 SEQ_OBJECT.close()
-logging.info("Finished Finding Alleles --- {:.3f} seconds ---".format(time.time() - START_TIME))
+if len(order_list) == 0:
+    logging.critical("All sequences failed quality check")
+    fo = open(output_file,'w')
+    fo.write("Sequence ID,GNUVID DB Version,CC,probability,Variant of Concern,Quality Check\n")
+    for y in failed_list:
+        seq_name_fail = y.split('__',1)[-1]
+        seq_name,fail_reason = seq_name_fail.split(' ',1)
+        y_results = ['None','None','None',fail_reason]
+        fo.write('{},{},{}\n'.format(seq_name,Classifier_version,','.join(y_results)))
+    sys.exit(0)
+#############qc-passed seq file#################
+seq_file_tmp = tempfile.NamedTemporaryFile(mode='w+')
+for new_seq_id in order_list:
+    seq_file_tmp.write('>'+new_seq_id+'\n'+query_dict[new_seq_id]+'\n')
+seq_file_tmp.seek(0)
+logging.info("Checked Quality of Sequences in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+#########################################################
+if e_matching == 1: ##Allele numbers for each record (exact matching)
+    if len(query_dict) < 5:
+        max_seqs = 5
+    else:
+        max_seqs = len(query_dict)
+    blast_report_tmp = tempfile.NamedTemporaryFile(mode='w+')
+    blast_results = os.system("blastn -task blastn -query {} -subject {} -evalue 0.000001 -max_target_seqs {} -outfmt '6 qseqid sseqid sseq sstart send pident qcovs' -out {}".format(Ref_CDS,seq_file_tmp.name,str(max_seqs),blast_report_tmp.name))
+    if blast_results == 0:
+        try:
+            blast_report_tmp.seek(0)
+            Isolate_blast_dict = defaultdict(list)
+            for line2 in blast_report_tmp:
+                line2_list = line2.rstrip().split("\t")
+                hit_seq = line2_list[2].replace('-','')
+                hit_seq = line2_list[0] + '__' + hit_seq.upper()
+                Isolate_blast_dict[line2_list[1]].append(hit_seq)
+            blast_report_tmp.close()
+            blast_parse = 'success'
+            logging.info("Finished Finding ORFs in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+        except:
+            for counter_seq_record in order_list:
+                tmp_NA_lst = [counter_SEQ_INFO] + NA_list
+                alleles.append(tmp_NA_lst)
+            logging.critical("Could not parse blastn and will run Random Forest prediction")
+        if blast_parse == 'success':
+            COMP_DICT = joblib.load(COMP_DB_file)
+            logging.info("Loaded comp DB in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+            for acc in order_list:#make sure space will not cause issues for dict keys
+                allele_tmp_lst = []
+                allele_tmp_lst.append(acc)
+                isolate_hits_dict = defaultdict(list)
+                N_list = []
+                hits_list = Isolate_blast_dict[acc]
+                for hit in hits_list:
+                    hit_id, hit_seq2 = hit.split('__')
+                    isolate_hits_dict[hit_id].append(hit_seq2)
+                if ARGS.individual:
+                    file_name = RESULTS_FOLDER + 'Genome' + acc.split('__',1)[0] + '.csv'
+                    QUERYFILE_IND = open(file_name,'w')
+                    QUERYFILE_IND.write("{}\n".format(",".join(REPORT_LIST)))
+                for gene_name in Genes:
+                    try:
+                        longest_seq = sorted(isolate_hits_dict[gene_name], key=len, reverse=True)[0]
+                        len_seq = str(len(longest_seq))
+                    except:
+                        longest_seq = 'Missing'
+                        len_seq = '0'
+                    try:
+                        ids_list = COMP_DICT[longest_seq]
+                        function, allele_number = ids_list[0].rsplit('_',1)
+                        allele_tmp_lst.append(allele_number)
+                        if ARGS.individual:
+                            SEQ_INFO_fn = acc.split('__',1)[-1] + '_' + function
+                            fst_date = sorted_alleles_data[ids_list[0]][0]
+                            lst_date = sorted_alleles_data[ids_list[0]][-1]
+                            query_sequence_details = [SEQ_INFO_fn, Classifier_version,
+                            ids_list[-1],len_seq,longest_seq, '0',
+                            allele_number,fst_date, lst_date]
+                    except:#I can use Counter for counting N which may be faster implementation
+                        Ns_count = 0
+                        for Nuc in longest_seq:
+                            if Nuc not in ['A','C','G','T']:
+                                Ns_count += 1
+                        if longest_seq == 'Missing':
+                            GNU_score = 'Missing'
+                            allele_number = 'Missing'
+                            Ns_count = 'NA'
+                        elif Ns_count > 0:
+                            GNU_score = 'None'
+                            allele_number = 'None'
+                        else:
+                            GNU_score = '0'
+                            allele_number = 'Novel'
+                        allele_tmp_lst.append(allele_number)
+                        if ARGS.individual:
+                            SEQ_INFO_fn = SEQ_INFO + '_' + gene_name
+                            query_sequence_details = [SEQ_INFO_fn, Classifier_version,
+                            GNU_score, len_seq, longest_seq,
+                            str(Ns_count), allele_number, 'NA', 'NA']
+                    if ARGS.individual:
+                        QUERYFILE_IND.write("{}\n".format(
+                                ",".join(query_sequence_details)))
+                if ARGS.individual:
+                    QUERYFILE_IND.close()
+                alleles.append(allele_tmp_lst)
+        logging.info("Finished Finding Alleles in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+    else:#could not run blastn so everything will be predicted
+        for counter_seq_record in order_list:
+            tmp_NA_lst = [counter_SEQ_INFO] + NA_list
+            alleles.append(tmp_NA_lst)
+        logging.critical("Could not run blastn and running Random Forest prediction")
+else:#exact matching turned off so everything will be predicted
+    for counter_seq_record in order_list:
+        tmp_NA_lst = [counter_seq_record] + NA_list
+        alleles.append(tmp_NA_lst)
+    logging.info("Skipping exact matching and running Random Forest prediction")
 #########Divergence of exact matches and prediction##########
 exact_match = []
 prediction_list = []
-prediction_list.append([])
-for index in range(1,len(alleles),1):
+prediction_dict = {}
+for index in range(0,len(alleles),1):
     try:
         results_data = []
         predict_ST = ST_allele_Dict['_'.join(alleles[index][1:])]
@@ -452,121 +489,173 @@ for index in range(1,len(alleles),1):
         ST_1st_date = ST_data[0][0]
         country_1st = ST_data[0][1]
         exact_CC = ST_data[0][2]
-        if int(exact_CC) in VOC_dict:
+        try:
             VOC = VOC_dict[int(exact_CC)]
-        else:
+        except:
             VOC = 'No'
         ST_last_date = ST_data[-1][0]
         country_last = ST_data[-1][1]
         p_value = 'Exact'
-        results_data = [predict_ST,country_1st,ST_1st_date,ST_last_date,country_last,exact_CC, p_value, VOC]
+        results_data = [predict_ST,country_1st,ST_1st_date,ST_last_date,country_last,exact_CC, p_value, VOC,'passed']
         if exact_CC == 'NA':
+            alleles[index].extend(results_data)
             prediction_list.append(alleles[index])
+            prediction_dict[alleles[index][0]] = alleles[index]
         else:
             alleles[index].extend(results_data)
             exact_match.append(alleles[index])
     except:
         prediction_list.append(alleles[index])
-########Failed Exact Matching########
-if len(prediction_list) > 0:
-    mafft_report_tmp = tempfile.NamedTemporaryFile(mode='w+')
-    seq_tmp = tempfile.NamedTemporaryFile(mode='w+')
-    for index in range(1,len(prediction_list),1):
-        seq_tmp.write('>'+prediction_list[index][0].split('__',1)[-1]+'\n'+query_dict[prediction_list[index][0]]+'\n')
-    seq_tmp.seek(0)
-    mafft_results = os.system('mafft --quiet --add {} --keeplength {} > {}'.format(seq_tmp.name, Ref_WG,mafft_report_tmp.name))
-    if mafft_results == 0:
-        try:
-            mafft_report_tmp.seek(0)
-            tmp_lst = []
-            SEQUENCES_LIST = []
+        prediction_dict[alleles[index][0]] = alleles[index]
+results_none = 18 * ['None'] #for failed
+failed_list_results = []
+for i in failed_list: #failed sequences results
+    None_list = [i.split(' ',1)[0]] + results_none + [i.split(' ',1)[-1]]
+    failed_list_results.append(None_list)
+#########block function to avoid memory overload########
+def FASTA_to_seq_list(seq_file,SNP_postitions,blk_size):
+    tmp_lst = []
+    SEQUENCES_LIST = []
+    order_list = []
+    SEQUENCE_STRING = ''
+    nucs = ['A','T','G','C','-']
+    for line in seq_file:
+        line = line.rstrip()
+        if line.startswith(">"):
+            if (len(SEQUENCE_STRING) > 0):
+                lst = list(SEQUENCE_STRING)
+                for j in SNP_postitions:
+                    nuc = lst[j].upper()
+                    if nuc in nucs:
+                        tmp_lst.append(nuc)
+                    else:
+                        tmp_lst.append(refseq_lst[j])
+                SEQUENCES_LIST.append(tmp_lst)
+                order_list.append(SEQUENCE_INFO)
+                SEQUENCE_STRING = ""
+                tmp_lst = []
+            SEQUENCE_INFO = line.lstrip(">")
+        else:
+            SEQUENCE_STRING += line
+        if len(SEQUENCES_LIST) == blk_size:
+            yield order_list, SEQUENCES_LIST
             order_list = []
-            SEQUENCE_STRING = ''
-            nucs = ['A','T','G','C','-']
-            for line in mafft_report_tmp:
-                line = line.rstrip()
-                if line.startswith(">"):
-                    if (len(SEQUENCE_STRING) > 0):
-                        lst = list(SEQUENCE_STRING)
-                        for j in postitions_list:
-                            nuc = lst[j].upper()
-                            if nuc in nucs:
-                                tmp_lst.append(nuc)
-                            else:
-                                tmp_lst.append(refseq_lst[j])
-                        SEQUENCES_LIST.append(tmp_lst)
-                        SEQUENCE_STRING = ""
-                        tmp_lst = []
-                    SEQUENCE_INFO = line.lstrip(">")
-                    order_list.append(SEQUENCE_INFO)
-                else:
-                    SEQUENCE_STRING += line
-            lst = list(SEQUENCE_STRING)
-            for j in postitions_list:
-                nuc = lst[j].upper()
-                if nuc in nucs:
-                    tmp_lst.append(nuc)
-                else:
-                    tmp_lst.append(refseq_lst[j])
-            SEQUENCES_LIST.append(tmp_lst)
-            mafft_report_tmp.close()
-            logging.info("Done with mafft")
-        except:
-            logging.critical("Could not parse mafft results")
+            SEQUENCES_LIST = []
+    lst = list(SEQUENCE_STRING)
+    for j in SNP_postitions:
+        nuc = lst[j].upper()
+        if nuc in nucs:
+            tmp_lst.append(nuc)
+        else:
+            tmp_lst.append(refseq_lst[j])
+    SEQUENCES_LIST.append(tmp_lst)
+    order_list.append(SEQUENCE_INFO)
+    seq_file.close()
+    yield order_list, SEQUENCES_LIST
+########Prediction for Failed Exact Matching########
+if len(prediction_list) > 0:
+    aln_report_tmp = tempfile.NamedTemporaryFile(mode='w+')
+    sam_log = tempfile.NamedTemporaryFile(mode='w+')
+    logging.info("Aligning to the reference")
+    if  len(prediction_list) == len(order_list):
+        seq_file_tmp.seek(0)
+        aln_results = os.system('minimap2 -a -x asm5 {} {} 2> {} | gofasta sam toMultiAlign --reference {} > {}'.format(Ref_WG,seq_file_tmp.name,sam_log.name,Ref_WG,aln_report_tmp.name))
     else:
-        logging.critical("Could not run mafft")
-###########Prediction#############
-    START_TIME = time.time()
-    loaded_model = joblib.load(DT_model)
-    seq_array = pd.DataFrame(SEQUENCES_LIST, columns=features_list)
-    logging.info("Finished opening model in --- {:.3f} seconds ---".format(time.time() - START_TIME))
-    START_TIME = time.time()
-    for i in nucs:
-    	line = [i] * len(SEQUENCES_LIST[0])
-    	seq_array.loc[len(seq_array)] = line
-    seq_array = pd.get_dummies(seq_array, columns=features_list)
-    seq_array.drop(seq_array.tail(len(nucs)).index, inplace=True)
-    logging.info("Finished one-hot encoding DF in --- {:.3f} seconds ---".format(time.time() - START_TIME))
-    START_TIME = time.time()
-    predictions = loaded_model.predict_proba(seq_array)
-    prediction_results = []
-    for index in range(1,len(predictions),1):
-        maxScore = 0
-        maxIndex = -1
-        # get the max probability score and its assosciated index
-        for i in range(len(predictions[index])):
-            if predictions[index][i] > maxScore:
-                maxScore = predictions[index][i]
-                maxIndex = i
-        score = maxScore
-        prediction = loaded_model.classes_[maxIndex]
-        if int(prediction) in VOC_dict:
-            VOC = VOC_dict[int(prediction)]
-        else:
-            VOC = 'No'
-        if 'None' in prediction_list[index] or 'NA' in prediction_list[index]:
-            results_data2 = prediction_list[index] + ['None','NA','NA','NA','NA',prediction,str(score),VOC] #exact_matching results
-        else:
-            results_data2 = prediction_list[index] + ['Novel','NA','NA','NA','NA',prediction,str(score),VOC] #exact_matching results
-        prediction_results.append(results_data2)
-#########Convergence of exact matches and prediction##########
+        seq_tmp = tempfile.NamedTemporaryFile(mode='w+')
+        for index in range(0,len(prediction_list),1):
+            seq_tmp.write('>'+prediction_list[index][0]+'\n'+query_dict[prediction_list[index][0]]+'\n')
+        seq_tmp.seek(0)
+        aln_results = os.system('minimap2 -a -x asm5 {} {} 2> {} | gofasta sam toMultiAlign --reference {} > {}'.format(Ref_WG,seq_tmp.name,sam_log.name,Ref_WG,aln_report_tmp.name))
+    if aln_results == 0:
+        from sklearn.ensemble import RandomForestClassifier
+        START_TIME = time.time()
+        logging.info(sam_log.readlines())
+        sam_log.close()
+        loaded_model = joblib.load(DT_model)
+        logging.info("Finished opening RF model in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+        #try:
+        aln_report_tmp.seek(0)
+        nucs = ['A','T','G','C','-']
+        counter = 0
+        prediction_results = []
+        mapped = []
+        for order_lst,seq_lst in FASTA_to_seq_list(aln_report_tmp,postitions_list,pred_block):
+            counter += 1
+            logging.info("processing group {} of {} sequences in --- {:.3f} seconds ---".format(
+                            counter,len(seq_lst),time.time() - START_TIME))
+            for i in nucs:
+                line = [i] * len(seq_lst[0])
+                seq_lst.append(line)
+            mapped.extend(order_lst)
+            logging.info("Finished adding all 5 categories in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+            seq_array = pd.DataFrame(seq_lst, columns=features_list)
+            logging.info("Finished making DataFrame in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+            seq_array = pd.get_dummies(seq_array, columns=features_list)
+            seq_array.drop(seq_array.tail(len(nucs)).index, inplace=True)
+            logging.info("Finished one-hot encoding DF in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+            predictions = loaded_model.predict_proba(seq_array)
+            for index in range(0,len(predictions),1):
+                maxScore = 0
+                maxIndex = -1
+                # get the max probability score and its assosciated index
+                for i in range(len(predictions[index])):
+                    if predictions[index][i] > maxScore:
+                        maxScore = predictions[index][i]
+                        maxIndex = i
+                score = maxScore
+                prediction = loaded_model.classes_[maxIndex]
+                if int(prediction) in VOC_dict:
+                    VOC = VOC_dict[int(prediction)]
+                else:
+                    VOC = 'No'
+                if len(prediction_dict[order_lst[index]]) > 18:#capture exact ST but CCNA
+                    results_data2 = prediction_dict[order_lst[index]][:-4] + [prediction,str(score),VOC,'passed (exact ST but it does not have CC so CC was predicted)']
+                elif 'None' in prediction_dict[order_lst[index]] or 'NA' in prediction_dict[order_lst[index]] or 'Missing' in prediction_dict[order_lst[index]]:
+                    results_data2 = prediction_dict[order_lst[index]] + ['None','NA','NA','NA','NA',prediction,str(score),VOC,'passed'] #exact_matching results
+                else:
+                    results_data2 = prediction_dict[order_lst[index]] + ['Novel','NA','NA','NA','NA',prediction,str(score),VOC,'passed'] #exact_matching results
+                prediction_results.append(results_data2)
+        logging.info("Done with aligning to the reference in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+        #except:
+        #    logging.critical("Could not parse the alignment")
+    else:
+        logging.critical("Could not run minimap2/gofasta")
+    unmapped = list(set(prediction_dict.keys())-set(mapped))
+    if len(unmapped) > 0:
+        results_none = 18 * ['None'] #failed mapping
+        unmapped_results = []
+        for i in unmapped:
+            None_list = [i] + results_none + ['failed (mapping)']
+            unmapped_results.append(None_list)
+#########Convergence of exact matches, prediction and failed##########
 final_results = [(int(x[0].split('__',1)[0]),x) for x in exact_match]
-final_results.extend([(int(x[0].split('__',1)[0]),x) for x in prediction_results])
+if len(prediction_list) > 0:
+    final_results.extend([(int(x[0].split('__',1)[0]),x) for x in prediction_results])
+    if len(unmapped) > 0:
+        final_results.extend([(int(x[0].split('__',1)[0]),x) for x in unmapped_results])
+if len(failed_list) > 0:
+    final_results.extend([(int(x[0].split('__',1)[0]),x) for x in failed_list_results])
+
 sorted_final_results = sorted(final_results, key=itemgetter(0))
 #####################OutPut###################
 fo = open(output_file,'w')
-new_details = ['Exact ST','First country seen','First date seen','Last country seen','Last date seen','CC','probability','Variant of Concern']
-fo.write("Sequence ID,GNUVID DB Version,{},{}\n".format(','.join(Genes),','.join(new_details)))
+new_details = ['Exact ST','First country seen','First date seen','Last country seen','Last date seen','CC','probability','Variant of Concern','Quality Check']
+if e_matching == 1:
+    fo.write("Sequence ID,GNUVID DB Version,{},{}\n".format(','.join(Genes),','.join(new_details)))
+else:
+    fo.write("Sequence ID,GNUVID DB Version,{}\n".format(','.join(new_details[-4:])))
 for y in sorted_final_results:
     seqId = y[1][0].split('__',1)[-1]
     y_results = y[1][1:]
-    fo.write('{},{},{}\n'.format(seqId,Classifier_version,','.join(y_results)))
-logging.info("Finished prediction in --- {:.3f} seconds ---".format(time.time() - START_TIME))
+    if e_matching == 1:#full report
+        fo.write('{},{},{}\n'.format(seqId,Classifier_version,','.join(y_results)))
+    else:#short report no alleles
+        fo.write('{},{},{}\n'.format(seqId,Classifier_version,','.join(y_results[-4:])))
+logging.info("Finished Run in --- {:.3f} seconds ---".format(time.time() - START_TIME0))
 logging.info("Typed the query isolate/s and wrote {}".format(output_file.rsplit(OS_SEPARATOR,1)[-1]))
-logging.info("""Thanks for using GNUVID v2.1, I hope you found it useful.
+logging.info("""Thanks for using GNUVID v2.2, I hope you found it useful.
 References:
 WhatsGNU 'Moustafa AM and Planet PJ 2020, Genome Biology;21:58'.
-MAFFT version 7 'Katoh and Standley 2013, Molecular Biology and Evolution;30:772-780'.
 pandas 'Reback et  al. 2020, DOI:10.5281/zenodo.3509134'.
 Scikit-learn 'Pedregosa et al. 2011, JMLR; 12:2825-2830'.
 BLAST+ 'Camacho et al. 2009, BMC Bioinformatics; 10:421'.
@@ -575,6 +664,7 @@ The reference genome MN908947 'Wu et al. 2020, Nature; 579:265–269'
 eBURST 'Feil et al. 2004, Journal of Bacteriology; 186:1518'
 goeBURST 'Francisco et al. 2009, BMC Bioinformatics; 10:152'
 minimap2 'Li H 2018, Bioinformatics; 34:18'
+gofasta 'https://github.com/cov-ert/gofasta'
 PHYLOViZ 2.0 'Nascimento et al. 2017, Bioinformatics; 33:128-129'
 The manual is extensive and available to read at https://github.com/ahmedmagds/GNUVID
 If you have problems, please file at https://github.com/ahmedmagds/GNUVID/issues""")

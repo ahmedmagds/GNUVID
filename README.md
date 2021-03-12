@@ -1,13 +1,12 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://travis-ci.org/ahmedmagds/GNUVID.svg?branch=master)](https://travis-ci.org/ahmedmagds/GNUVID)
 [![Anaconda_cloud](https://anaconda.org/bioconda/gnuvid/badges/version.svg)](https://anaconda.org/bioconda/gnuvid)
-[![Anaconda_downloads](https://anaconda.org/bioconda/gnuvid/badges/downloads.svg)](https://anaconda.org/bioconda/gnuvid)
 [![Anaconda_install](https://anaconda.org/bioconda/gnuvid/badges/installer/conda.svg)](https://anaconda.org/bioconda/gnuvid)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3927063.svg)](https://doi.org/10.5281/zenodo.4313855)
 # GNUVID
 **G**ene **N**ovelty **U**nit-based **V**irus **ID**entification for **SARS-CoV-2**
 ## Introduction
-GNUVID (GNU-based Virus IDentification) is a Python3 program. It ranks CDS nucleotide sequences in a genome fna file based on the number of observed exact CDS nucleotide matches in a public or private database. It was created to type SARS-CoV-2 genomes using a whole genome multilocus sequence typing (wgMLST) approach. The 10 ORFs (ORF1ab, S, ORF3a, E, M, ORF6, ORF7a, ORF8, N, ORF10) in SARS-CoV-2 are used for typing. It automatically assigns allele numbers to each of the 10 ORFs and a Sequence Type (ST) to each genome, based on its profile of unique gene allele sequences. It is based on our recent panallelome approach implemented in [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU). It can type your query genome in seconds. As of GNUVID v2.1, GNUVID_Predict.py is a speedy algorithm for assigning Clonal Complexes to new genomes, which uses a Machine Learning Random Forest Classifier.<br/>
+GNUVID (GNU-based Virus IDentification) is a Python3 program. It ranks CDS nucleotide sequences in a genome fna file based on the number of observed exact CDS nucleotide matches in a public or private database. It was created to type SARS-CoV-2 genomes using a whole genome multilocus sequence typing (wgMLST) approach. The 10 ORFs (ORF1ab, S, ORF3a, E, M, ORF6, ORF7a, ORF8, N, ORF10) in SARS-CoV-2 are used for typing. It automatically assigns allele numbers to each of the 10 ORFs and a Sequence Type (ST) to each genome, based on its profile of unique gene allele sequences. It is based on our recent panallelome approach implemented in [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU). It can type your query genome in seconds. As of GNUVID v2.0, GNUVID_Predict.py is a speedy algorithm for assigning Clonal Complexes to new genomes, which uses a Machine Learning Random Forest Classifier.<br/>
 
 A pre-print of the paper **Emerging SARS-CoV-2 diversity revealed by rapid whole genome sequence typing** can be found here: https://www.biorxiv.org/content/10.1101/2020.12.28.424582v1
 
@@ -40,8 +39,10 @@ conda activate GNUVID
 
 - CC70, CC26, CC343, CC439, CC927, CC1434, CC11290, CC13202, CC13669 and CC17244 have now been called CC550, CC750, CC9999, CC2649, CC1179, CC2175, CC18372, CC13208, CC12995 and CC13413 respectively.
 
-## GNUVID now assigns genomes to the three new Variants of Concern:
+## GNUVID now assigns genomes to five new Variants of Concern:
 - **CC81085 represents the Brazilian P.1 lineage (a.k.a. 20J/501Y.V3).**
+- **CC70949 represents the Brazilian P.2 lineage.**
+- **CC72860 represents the Californian B.1.429 (CAL.20C) lineage.**
 - **CC71014 represents the South African B.1.351 lineage (a.k.a. 20H/501Y.V2).**
 - **10 CCs represent the UK B.1.1.7 lineage (a.k.a. 20I/501Y.V1 Variant of Concern (VOC) 202012/01). (10 CCs: 46649, 45062, 49676, 54949, 54452, 58534, 57630, 66559, 62415 and 67441).**
 
@@ -57,17 +58,18 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | Clonal Complex | Number of STs | Number of isolates | Most common 5 countries | Most common Region | Date range | Status | Variant of Concern (%isolates) | GISAID Clade |
 |----------------|---------------|--------------------|-------------------------|--------------------|------------|--------|--------------------------------|--------------|
 | **81085** | 15 | 22 | Brazil (77%), Japan (18%), USA (5%) | South America (77%) | 2020-12-04 to 2021-01-18 | **Active** | P.1 (100) | GR |
+| **70949** | 69 | 92 | Brazil (86%), USA (5%), United Kingdom (5%), Canada (3%) | South America (86%) | 2020-10-26 to 2020-12-20 | Quiet | P.2 (100) | GR |
 | **71014** | 35 | 35 | South Africa (89%), France (3%), United Kingdom (3%), Sweden (3%), South Korea (3%) | Africa (89%) | 2020-10-22 to 2020-12-26 | **Active** | B.1.351 (100) | GH |
-| **45062** | 197 | 518 | United Kingdom (98%), Portugal (1%), France (0%), Finland (0%), Italy (0%) | Europe (100%) | 2020-09-20 to 2020-12-29 | **Active** | B.1.1.7 (100) | GR |
-| **46649** | 1647 | 3429 | United Kingdom (96%), Denmark (2%), Portugal (0%), Italy (0%), Finland (0%) | Europe (100%) | 2020-09-30 to 2020-12-29 | **Active** | B.1.1.7 (100) | GR |
-| **49676** | 123 | 351 | United Kingdom (99%), Netherlands (1%), Pakistan (0%) | Europe (100%) | 2020-10-11 to 2020-12-25 | **Active** | B.1.1.7 (100) | GR |
-| **54452** | 57 | 102 | United Kingdom (99%), Sweden (1%) | Europe (100%) | 2020-10-21 to 2020-12-28 | **Active** | B.1.1.7 (100) | GR |
-| 54949 | 36 | 92 | United Kingdom (92%), Netherlands (8%) | Europe (100%) | 2020-10-22 to 2020-12-22 | Quiet | B.1.1.7 (100) | GR |
-| **57630** | 222 | 484 | United Kingdom (97%), France (1%), Australia (0%), Israel (0%), Portugal (0%) | Europe (99%) | 2020-10-29 to 2020-12-28 | **Active** | B.1.1.7 (100) | GR |
-| **58534** | 231 | 438 | United Kingdom (97%), France (1%), Portugal (1%), Denmark (0%), Israel (0%) | Europe (99%) | 2020-10-29 to 2020-12-28 | **Active** | B.1.1.7 (100) | GR |
-| 62415 | 30 | 71 | United Kingdom (96%), USA (4%) | Europe (96%) | 2020-11-06 to 2020-12-21 | Quiet | B.1.1.7 (100) | GR |
-| **66559** | 42 | 94 | United Kingdom (98%), France (1%), Italy (1%) | Europe (100%) | 2020-11-08 to 2020-12-27 | **Active** | B.1.1.7 (100) | GR |
-| 67441 | 48 | 85 | United Kingdom (99%), Netherlands (1%) | Europe (100%) | 2020-11-08 to 2020-12-22 | Quiet | B.1.1.7 (100) | GR |
+| **45062** | 197 | 518 | United Kingdom (98%), Portugal (1%), France (0%), Finland (0%), Italy (0%) | Europe (100%) | 2020-09-20 to 2020-12-29 | **Active** | B.1.1.7 (100) | GRY |
+| **46649** | 1647 | 3429 | United Kingdom (96%), Denmark (2%), Portugal (0%), Italy (0%), Finland (0%) | Europe (100%) | 2020-09-30 to 2020-12-29 | **Active** | B.1.1.7 (100) | GRY |
+| **49676** | 123 | 351 | United Kingdom (99%), Netherlands (1%), Pakistan (0%) | Europe (100%) | 2020-10-11 to 2020-12-25 | **Active** | B.1.1.7 (100) | GRY |
+| **54452** | 57 | 102 | United Kingdom (99%), Sweden (1%) | Europe (100%) | 2020-10-21 to 2020-12-28 | **Active** | B.1.1.7 (100) | GRY |
+| 54949 | 36 | 92 | United Kingdom (92%), Netherlands (8%) | Europe (100%) | 2020-10-22 to 2020-12-22 | Quiet | B.1.1.7 (100) | GRY |
+| **57630** | 222 | 484 | United Kingdom (97%), France (1%), Australia (0%), Israel (0%), Portugal (0%) | Europe (99%) | 2020-10-29 to 2020-12-28 | **Active** | B.1.1.7 (100) | GRY |
+| **58534** | 231 | 438 | United Kingdom (97%), France (1%), Portugal (1%), Denmark (0%), Israel (0%) | Europe (99%) | 2020-10-29 to 2020-12-28 | **Active** | B.1.1.7 (100) | GRY |
+| 62415 | 30 | 71 | United Kingdom (96%), USA (4%) | Europe (96%) | 2020-11-06 to 2020-12-21 | Quiet | B.1.1.7 (100) | GRY |
+| **66559** | 42 | 94 | United Kingdom (98%), France (1%), Italy (1%) | Europe (100%) | 2020-11-08 to 2020-12-27 | **Active** | B.1.1.7 (100) | GRY |
+| 67441 | 48 | 85 | United Kingdom (99%), Netherlands (1%) | Europe (100%) | 2020-11-08 to 2020-12-22 | Quiet | B.1.1.7 (100) | GRY |
 | **255** | 3238 | 5568 | USA (21%), United Kingdom (17%), India (8%), France (6%), Netherlands (5%) | Europe (57%) | 2020-01-24 to 2020-12-26 | **Active** | Not_VOC (0) | G |
 | **258** | 6737 | 12935 | USA (66%), Denmark (5%), United Kingdom (5%), Netherlands (4%), France (3%) | North America (69%) | 2020-02-16 to 2020-12-28 | **Active** | Not_VOC (0.007730963) | GH |
 | **300** | 10460 | 17836 | United Kingdom (38%), USA (16%), Russia (4%), Denmark (4%), India (3%) | Europe (64%) | 2020-01-24 to 2020-12-28 | **Active** | Not_VOC (0) | GR |
@@ -122,7 +124,7 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 | **45545** | 38 | 74 | Belgium (31%), Luxembourg (30%), Netherlands (22%), United Kingdom (5%), Portugal (5%) | Europe (100%) | 2020-09-18 to 2020-12-27 | **Active** | Not_VOC (0) | GH |
 | **53107** | 23 | 83 | Luxembourg (100%) | Europe (100%) | 2020-10-19 to 2020-12-27 | **Active** | Not_VOC (0) | G |
 | **55253** | 53 | 103 | Luxembourg (97%), South Korea (3%) | Europe (97%) | 2020-09-30 to 2020-12-29 | **Active** | Not_VOC (0) | GV |
-| **72860** | 71 | 87 | USA (97%), Australia (2%), New Zealand (1%) | North America (97%) | 2020-09-28 to 2020-12-27 | **Active** | Not_VOC (0) | GH |
+| **72860** | 71 | 87 | USA (97%), Australia (2%), New Zealand (1%) | North America (97%) | 2020-09-28 to 2020-12-27 | **Active** | B.1.429 (CAL.20C) (100) | GH |
 
 
 ## Installation
@@ -159,7 +161,7 @@ $export PATH=$PATH:/path/to/folder/having/GNUVID/bin
 If you need it permanently, you can add this last line to your .bashrc or .bash_profile.
 ### Test
 * Type GNUVID_Predict.py -h and it should output help screen.
-* Type GNUVID_Predict.py -v and you should see an output like GNUVID.py v2.1.
+* Type GNUVID_Predict.py -v and you should see an output like GNUVID.py v2.2.
 
 ## Usage for GNUVID_Predict.py
 ### Input
@@ -175,16 +177,16 @@ $GNUVID_Predict.py -i -o new_genomes_GNUVID new_genomes.fasta
 ```
 ### Command line options
 ```
-usage: GNUVID_Predict.py [-h] [-o OUTPUT_FOLDER] [-i] [-f] [-q] [-v] query_fna
+usage: GNUVID_Predict.py [-h] [-o OUTPUT_FOLDER] [-m MIN_LEN] [-n N_MAX] [-b BLOCK_PRED] [-e] [-i] [-f] [-q] [-v] query_fna
 
-GNUVID v2.1 uses the natural variation in public genomes of SARS-CoV-2 to rank
+GNUVID v2.2 uses the natural variation in public genomes of SARS-CoV-2 to rank
 gene sequences based on the number of observed exact matches (the GNU score)
 in all known genomes of SARS-CoV-2. It assigns a sequence type to each genome
 based on its profile of unique gene allele sequences. It can type (using whole
 genome multilocus sequence typing; wgMLST) your query genome in seconds.
 GNUVID_Predict is a speedy algorithm for assigning Clonal Complexes to new
 genomes, which uses machine learning Random Forest Classifier, implemented as
-of GNUVID v2.1.
+of GNUVID v2.0.
 
 positional arguments:
   query_fna             Query Whole Genome Nucleotide FASTA file to analyze
@@ -193,13 +195,17 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT_FOLDER, --output_folder OUTPUT_FOLDER
-                        Output folder and prefix to be created for results
-                        (default: timestamped GNUVID_results in the current
-                        directory)
-  -i, --individual      Individual Output file for each genome showing the
-                        allele sequence and GNU score for each gene allele
-  -f, --force           Force overwriting existing results folder assigned
-                        with -o (default: off)
+                        Output folder and prefix to be created for results (default: timestamped GNUVID_results in the current directory)
+  -m MIN_LEN, --min_len MIN_LEN
+                        minimum sequence length [Default: 15000]
+  -n N_MAX, --n_max N_MAX
+                        maximum proportion of ambiguity (Ns) allowed [Default: 0.5]
+  -b BLOCK_PRED, --block_pred BLOCK_PRED
+                        prediction block size, good for limited memory [Default: 1000]
+  -e, --exact_matching  turn off exact matching (no allele will be identified for each ORF) and only use machine learning prediction
+                        [default: False]
+  -i, --individual      Individual Output file for each genome showing the allele sequence and GNU score for each gene allele
+  -f, --force           Force overwriting existing results folder assigned with -o (default: off)
   -q, --quiet           No screen output [default OFF]
   -v, --version         print version and exit
 ```
@@ -207,11 +213,11 @@ optional arguments:
 #### Always
 **GNUVID_results_date_time.csv** (csv file, specify different name using -o option)
 
-Sequence ID | GNUVID DB Version | ORF1ab | Surface_glycoprotein | ORF3a | Envelope_protein | Membrane_glycoprotein | ORF6 | ORF7a | ORF8 | Nucleocapsid_phosphoprotein | ORF10 | Exact ST | First Country seen | First date seen | Last country seen | Last date seen | CC | probability | Variant of Concern |
------------ | ----------------- | ------ | -------------------- | ----- | ---------------- | --------------------- | ---- | ----- | ---- | --------------------------- | ----- | -------- | ------------------ | --------------- | ----------------- | -------------- | -- | -----------  | ------------------ |
-isolate_x | 10/20/20 | 4 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 4 | China | 2019-12-30 | India | 2020-08-12 | 4 | Exact | P.1 |
-isolate_y | 10/20/20 | Novel | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | Novel | NA | NA | NA | NA | 4 | 0.9 | No |
-isolate_z | 10/20/20 | None | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | None | NA | NA | NA | NA | 4 | 0.8 | B.1.1.7 |
+Sequence ID | GNUVID DB Version | ORF1ab | Surface_glycoprotein | ORF3a | Envelope_protein | Membrane_glycoprotein | ORF6 | ORF7a | ORF8 | Nucleocapsid_phosphoprotein | ORF10 | Exact ST | First Country seen | First date seen | Last country seen | Last date seen | CC | probability | Variant of Concern | Quality Check |
+----------- | ----------------- | ------ | -------------------- | ----- | ---------------- | --------------------- | ---- | ----- | ---- | --------------------------- | ----- | -------- | ------------------ | --------------- | ----------------- | -------------- | -- | -----------  | ------------------ | ------------- |
+isolate_x | 01/06/21 | 4 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 4 | China | 2019-12-30 | India | 2020-08-12 | 4 | Exact | P.1 | passed |
+isolate_y | 01/06/21 | None | None | None | None | None | None | None | None | None | None | None | None | None | None | None | None | None | None | failed (seq_len:4) |
+isolate_z | 01/06/21 | None | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | None | NA | NA | NA | NA | 4 | 0.8 | B.1.1.7 | passed |
 
 * Column 1: Query Sequence name
 * Column 2: GNUVID Database version (results will vary as more genomes are added to the DB)
@@ -223,7 +229,8 @@ isolate_z | 10/20/20 | None | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | None | NA | NA
 * Column 17: Last Date when the ST was seen (only if exact)
 * Column 18: Clonal Complex (CC) assigned
 * Column 19: Probability of the assignment (if exact, it means this is an exact match to a previous genome in the database)
-* Column 20: Variant of Concern will be reported if isolate belongs to P1, B.1.1.7 or B.1.351<br/>
+* Column 20: Variant of Concern will be reported if isolate belongs to P1, B.1.1.7 or B.1.351
+* Column 21: Quality check before prediction (passed or failed (reason))<br/>
 
 **GNUVID_date_time.log** (Log file, e.g. GNUVID_20200607_170457.log)
 
@@ -266,6 +273,7 @@ Rapid whole genome sequence typing reveals multiple waves of SARS-CoV-2 spread<b
 * MAFFT version 7 'Katoh and Standley 2013, Molecular Biology and Evolution;30:772-780'.
 * pandas 'Reback et  al. 2020, DOI:10.5281/zenodo.3509134'.
 * minimap2 'Li H 2018, Bioinformatics; 34:18'.
+* gofasta 'https://github.com/cov-ert/gofasta'
 * Scikit-learn 'Pedregosa et al. 2011, JMLR; 12:2825-2830'.
 * BLAST+ 'Camacho et al. 2009, BMC Bioinformatics; 10:421'.
 * GISAID 'Shu Y. and McCauley J. 2017, EuroSurveillance; 22:13'.
@@ -273,6 +281,7 @@ Rapid whole genome sequence typing reveals multiple waves of SARS-CoV-2 spread<b
 * eBURST 'Feil et al. 2004,  Journal of Bacteriology; 186:1518'.
 * goeBURST 'Francisco et al. 2009, BMC Bioinformatics; 10:152'.
 * PHYLOViZ 2.0 'Nascimento et al. 2017, Bioinformatics; 33:128-129'.
+
 ## Author
 Ahmed M. Moustafa: [ahmedmagds](https://github.com/ahmedmagds)<br/>
 Twitter: [Ahmed_Microbes](https://twitter.com/Ahmed_Microbes)

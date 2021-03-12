@@ -59,7 +59,7 @@ START_TIME = time.time()
 
 PARSER = argparse.ArgumentParser(
     prog="GNUVID.py",
-    description="GNUVID v2.1 utilizes the natural\
+    description="GNUVID v2.2 utilizes the natural\
  variation in public genomes of SARS-CoV-2 to rank gene sequences based on the number of observed exact \
  matches (the GNU score) in all known genomes of SARS-CoV-2. It types the genomes based on their unique \
  gene allele sequences. It types (using a whole genome MLST) your query genome in seconds.",
@@ -1044,7 +1044,7 @@ for QUERYFILE in QUERY_LIST:
     QUERYFILE_OBJECT.close()
 logging.info("Typed the query isolate/s and wrote Query_isolates_GNUVID_ST_Report.txt")
 logging.info("Done in --- {:.3f} seconds ---".format(time.time() - START_TIME))
-logging.info("""Thanks for using GNUVID v2.1, I hope you found it useful.
+logging.info("""Thanks for using GNUVID v2.2, I hope you found it useful.
 Please cite WhatsGNU 'Moustafa AM and Planet PJ 2020, Genome Biology;21:58'.
 Please also cite BLAST+ 'Camacho et al. 2009, BMC Bioinformatics;10:421' if you use GNUVID.
 Please also cite GISAID 'Shu Y. and McCauley J. 2017, EuroSurveillance; 22:13'

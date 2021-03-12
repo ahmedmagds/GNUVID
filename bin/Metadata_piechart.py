@@ -10,7 +10,7 @@ from collections import Counter
 from collections import OrderedDict
 PARSER = argparse.ArgumentParser(
     prog="Metadata_piechart.py",
-    description="metadata piechart script for GNUVID v2.1. It will pie-plot region distribution",)
+    description="metadata piechart script for GNUVID v2.2. It will pie-plot region distribution",)
 PARSER.add_argument("-l", "--legend", help="Add legend (default: off)", action="store_true",)
 PARSER.add_argument("output", type=str, help="output folder name")
 PARSER.add_argument("ST_CC", type=str,
