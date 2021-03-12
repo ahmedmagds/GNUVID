@@ -134,6 +134,8 @@ The "Most common 5 countries" and "Most common Region" columns show the five cou
 * [MAFFT](https://mafft.cbrc.jp/alignment/software/source.html)
 * [pandas](https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html)
 * [scikit-learn](https://scikit-learn.org/stable/install.html)
+* [minimap2](https://github.com/lh3/minimap2)
+* [Gofasta](https://github.com/cov-ert/gofasta)
 ### Bioconda (**recommended**)
 If you use Conda you can use the Bioconda channel to install it in the conda base:
 Make a new environment and install GNUVID in it
