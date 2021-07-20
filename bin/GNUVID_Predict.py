@@ -146,11 +146,11 @@ else:
 if ARGS.min_len:
     min_len = ARGS.min_len
 else:
-    min_len = 15000
+    min_len = 20000
 if ARGS.n_max:
     n_max = ARGS.n_max
 else:
-    n_max = 0.5
+    n_max = 0.3
 #########blast check##############
 try:
     GETVERSION = subprocess.Popen("blastn -version", shell=True, stdout=subprocess.PIPE).stdout
