@@ -10,7 +10,7 @@ from collections import Counter
 from collections import OrderedDict
 PARSER = argparse.ArgumentParser(
     prog="Metadata_piechart.py",
-    description="metadata piechart script for GNUVID v2.2. It will pie-plot region distribution",)
+    description="metadata piechart script for GNUVID v2.3. It will pie-plot region distribution",)
 PARSER.add_argument("-l", "--legend", help="Add legend (default: off)", action="store_true",)
 PARSER.add_argument("output", type=str, help="output folder name")
 PARSER.add_argument("ST_CC", type=str,
@@ -80,7 +80,8 @@ for i in ST_CC_list:
         ST_CC_counts_str.append(str(metadata_Count[j]))
     Summary_obj.write('\t'.join(ST_CC_counts_str))
     fig1, ax1 = plt.subplots(figsize=(4.8, 4.8))
-    pie = ax1.pie(ST_CC_counts, startangle=90)
+    xx = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#000000','#8c564b']
+    pie = ax1.pie(ST_CC_counts, startangle=90, colors=xx)
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     if ARGS.legend:
         plt.legend(pie[0],Regions_final_list, bbox_to_anchor=(1,0), loc="best",

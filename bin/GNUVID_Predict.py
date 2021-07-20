@@ -42,11 +42,13 @@
 
 import os
 import sys
+import urllib.request
 import argparse
 import joblib
 import pandas as pd
 import time
 import tempfile
+import gzip
 import logging
 import subprocess
 from shutil import rmtree as rmt
@@ -56,7 +58,7 @@ START_TIME = time.time()
 ########################################
 PARSER = argparse.ArgumentParser(
     prog="GNUVID_Predict.py",
-    description="GNUVID v2.2 uses the natural variation in public genomes of SARS-CoV-2 to \
+    description="GNUVID v2.3 uses the natural variation in public genomes of SARS-CoV-2 to \
     rank gene sequences based on the number of observed exact matches (the GNU score) \
     in all known genomes of SARS-CoV-2. It assigns a sequence type to each genome based on \
     its profile of unique gene allele sequences. It can type (using whole genome multilocus sequence typing; wgMLST) \
@@ -119,7 +121,7 @@ PARSER.add_argument(
     "--version",
     help="print version and exit",
     action="version",
-    version="%(prog)s 2.1",
+    version="%(prog)s 2.3",
 )
 PARSER.add_argument(
     "query_fna", type=str, help="Query Whole Genome Nucleotide FASTA file to analyze (.fna)"
@@ -131,7 +133,7 @@ ARGS = PARSER.parse_args()
 if bool(vars(ARGS)["individual"]) and bool(vars(ARGS)["exact_matching"]):
     PARSER.exit(status=0, message="Error: You cannot use -i with -e\n")
 OS_SEPARATOR = os.sep
-Classifier_version = '01/06/2021'
+Classifier_version = '06/21/2021'
 START_TIME0 = time.time()
 if ARGS.exact_matching:
     e_matching = 0
@@ -203,23 +205,36 @@ seq_file = ARGS.query_fna#sequence_file
 SEQ_OBJECT = open(seq_file,'r')
 Script_Path = os.path.realpath(__file__)
 DB_Folder_Path = os.path.join(Script_Path.rsplit(OS_SEPARATOR,2)[0], "db")
-VCF_file = os.path.join(DB_Folder_Path,'SNPs_20188_Jan2021.txt') # has the nucleotide(feature) positions
+VCF_file = os.path.join(DB_Folder_Path,'SNPs_26221_Jun2021.txt') # has the nucleotide(feature) positions
 VCF_OBJECT = open(VCF_file,'r')
-DT_model = os.path.join(DB_Folder_Path,'GNUVID_01062021_RandomForest.joblib')#ML model
-COMP_DB_file = os.path.join(DB_Folder_Path,'GNUVID_01062021_comp_db.joblib')#compressed DB
-strains_report_file = os.path.join(DB_Folder_Path,'GNUVID_01062021_DB_isolates_report.txt')
+CCs_file = os.path.join(DB_Folder_Path,'GNUVID_06212021_CCs_report.txt') # has the WHO naming
+CCs_OBJECT = open(CCs_file,'r')
+DT_model = os.path.join(DB_Folder_Path,'GNUVID_06212021_RandomForest.joblib')#ML model
+COMP_DB_file = os.path.join(DB_Folder_Path,'GNUVID_06212021_comp_db.joblib')#compressed DB
+if os.path.exists(COMP_DB_file):
+    logging.info("Found compressed database")
+else:
+    url = 'https://zenodo.org/record/5112632/files/GNUVID_06212021_comp_db.joblib?download=1'
+    urllib.request.urlretrieve(url, COMP_DB_file)
+    logging.info("Downloaded compressed database")
+strains_report_file = os.path.join(DB_Folder_Path,'GNUVID_06212021_DB_isolates_report_deidentified.txt.gz')
 Ref_CDS = os.path.join(DB_Folder_Path,'MN908947.3_cds.fna')
 Ref_WG = os.path.join(DB_Folder_Path,'MN908947.3.fasta')
-########################################
-VOC_dict = {81085:'P.1',70949:'P.2',72860:'B.1.429 (CAL.20C)',71014:'B.1.351', 46649:'B.1.1.7', 45062:'B.1.1.7',
-49676:'B.1.1.7', 54949:'B.1.1.7', 54452:'B.1.1.7', 58534:'B.1.1.7',
-57630:'B.1.1.7', 66559:'B.1.1.7', 62415:'B.1.1.7', 67441:'B.1.1.7'}
+############SNPs and CCs_WHO##################
+VOC_dict = {}
+CCs_OBJECT.readline()
+for line in CCs_OBJECT:
+    CC_lst = line.rstrip().split('\t')
+    WHO_name = CC_lst[8] + ' ({})'.format(CC_lst[6].split(' ')[0])
+    VOC_dict[int(CC_lst[0])] = WHO_name
+CCs_OBJECT.close()
 features_list = []
 postitions_list = []
 for line in VCF_OBJECT:
     SNP = line.rstrip()
     features_list.append(SNP)
     postitions_list.append(int(SNP)-1)
+VCF_OBJECT.close()
 #############################
 ref_obj = open(Ref_WG,'r')
 ref_obj.readline()
@@ -236,8 +251,7 @@ ST_allele_Dict = {}
 Alleles_dict = {}
 ST_dates_country_CC_dict = defaultdict(list)
 ST_all_dates = defaultdict(list)
-report_object = open(strains_report_file,'r')
-report_object.seek(0)
+report_object = gzip.open(strains_report_file,'rt')
 header_line = (report_object.readline().rstrip()).split('\t')
 Gene_counter = (header_line.index('ORF1ab')) - 1
 ST_index = header_line.index('ST')
@@ -249,8 +263,6 @@ try:
 except:
     CC_index = 'NA'
 #capturing dates, countries, regions for STs and dates for alleles
-report_object.seek(0)
-report_object.readline()
 if CC_index != 'NA':
     CC_ST_dict = {}
 gene_all_alleles_dict = defaultdict(list)
@@ -301,6 +313,7 @@ for allele in gene_all_alleles_dict:
         sorted_alleles_data[allele] = alleles_all_dates[allele]
     else:
         sorted_alleles_data[allele] = sorted(gene_all_alleles_dict[allele])
+report_object.close()
 logging.info("Finished Parsing metadata in --- {:.3f} seconds ---".format(time.time() - START_TIME))
 ##########Quality Check###############
 START_TIME = time.time()
@@ -367,7 +380,7 @@ SEQ_OBJECT.close()
 if len(order_list) == 0:
     logging.critical("All sequences failed quality check")
     fo = open(output_file,'w')
-    fo.write("Sequence ID,GNUVID DB Version,CC,probability,Variant of Concern,Quality Check\n")
+    fo.write("Sequence ID,GNUVID DB Version,CC,probability,WHO Naming,Quality Check\n")
     for y in failed_list:
         seq_name_fail = y.split('__',1)[-1]
         seq_name,fail_reason = seq_name_fail.split(' ',1)
@@ -466,6 +479,7 @@ if e_matching == 1: ##Allele numbers for each record (exact matching)
                 if ARGS.individual:
                     QUERYFILE_IND.close()
                 alleles.append(allele_tmp_lst)
+            del COMP_DICT
         logging.info("Finished Finding Alleles in --- {:.3f} seconds ---".format(time.time() - START_TIME))
     else:#could not run blastn so everything will be predicted
         for counter_seq_record in order_list:
@@ -639,7 +653,7 @@ if len(failed_list) > 0:
 sorted_final_results = sorted(final_results, key=itemgetter(0))
 #####################OutPut###################
 fo = open(output_file,'w')
-new_details = ['Exact ST','First country seen','First date seen','Last country seen','Last date seen','CC','probability','Variant of Concern','Quality Check']
+new_details = ['Exact ST','First country seen','First date seen','Last country seen','Last date seen','CC','probability','WHO Naming','Quality Check']
 if e_matching == 1:
     fo.write("Sequence ID,GNUVID DB Version,{},{}\n".format(','.join(Genes),','.join(new_details)))
 else:
@@ -653,7 +667,7 @@ for y in sorted_final_results:
         fo.write('{},{},{}\n'.format(seqId,Classifier_version,','.join(y_results[-4:])))
 logging.info("Finished Run in --- {:.3f} seconds ---".format(time.time() - START_TIME0))
 logging.info("Typed the query isolate/s and wrote {}".format(output_file.rsplit(OS_SEPARATOR,1)[-1]))
-logging.info("""Thanks for using GNUVID v2.2, I hope you found it useful.
+logging.info("""Thanks for using GNUVID v2.3, I hope you found it useful.
 References:
 WhatsGNU 'Moustafa AM and Planet PJ 2020, Genome Biology;21:58'.
 pandas 'Reback et  al. 2020, DOI:10.5281/zenodo.3509134'.
