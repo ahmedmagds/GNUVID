@@ -23,6 +23,7 @@ if len(sys.argv) == 1:
     sys.exit(0)
 ARGS = PARSER.parse_args()
 OS_SEPARATOR = os.sep
+TIMESTR = time.strftime("%Y%m%d")
 #########blast check##############
 try:
     GETVERSION = subprocess.Popen("blastn -version", shell=True, stdout=subprocess.PIPE).stdout
@@ -39,16 +40,16 @@ except:
         status=0,
         message="Folder exists, Please change --output_folder\n")
 meta_obj = open(ARGS.metadata,'r')
-epi_obj = open('epi_no_N.txt','w')
-next_exc_obj = open('To_exclude_next_time.txt','w')
-metadata_included_obj = open('metadata_updated.csv','w')
-EXC_OBJECT = open('Excluded_Sequences.csv', "w")
+epi_obj = open('epi_no_N_{}.txt'.format(TIMESTR),'w')
+next_exc_obj = open('To_exclude_next_time_{}.txt'.format(TIMESTR),'w')
+metadata_included_obj = open('metadata_updated_{}.csv'.format(TIMESTR),'w')
+EXC_OBJECT = open('Excluded_Sequences_{}.csv'.format(TIMESTR), 'w')
 ########################
 if ARGS.exclusion:
     exc_obj = open(ARGS.exclusion,'r')
     exc_lst = []
     for line in exc_obj:
-        exc_lst.append(line.rstrip().split('|')[1])
+        exc_lst.append(line.rstrip())
     exc_set = set(exc_lst)
 else:
     exc_set = set()
@@ -168,7 +169,8 @@ order_dict = defaultdict(list)
 prog_lst = [10,100,500,1000,5000,10000,20000,50000,100000,150000,200000,300000,
             400000,500000,600000,700000,800000,900000,1000000,1100000,1200000,
             1300000,1400000,1500000,1600000,1700000,1800000,1900000,2000000,
-            2100000,2200000,2300000,2400000,2500000,2600000,2700000,2800000]
+            2100000,2200000,2300000,2400000,2500000,2600000,2700000,2800000,
+            2900000,3000000,3100000,3200000,3300000,3400000,3500000,3600000]
 START_TIME = time.time()
 done_list = []
 for line in FASTAFILE_OBJECT:
@@ -300,7 +302,7 @@ print('Failed Blast run: ',failed_blast_run_counter)
 print('Failed pre-blast Amibguity QC: ',failed_qc_counter)
 #################################################
 sorted_dates = sorted(list(order_dict.keys()))
-Order_OBJECT = open('Files_Order_list.txt', "w")
+Order_OBJECT = open('Files_Order_list_{}.txt'.format(TIMESTR), "w")
 for s_seq_date in sorted_dates:
     Order_OBJECT.write('\n'.join(order_dict[s_seq_date])+'\n')
 Order_OBJECT.close()

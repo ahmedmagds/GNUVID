@@ -58,7 +58,7 @@ START_TIME = time.time()
 ########################################
 PARSER = argparse.ArgumentParser(
     prog="GNUVID_Predict.py",
-    description="GNUVID v2.3 uses the natural variation in public genomes of SARS-CoV-2 to \
+    description="GNUVID v2.4 uses the natural variation in public genomes of SARS-CoV-2 to \
     rank gene sequences based on the number of observed exact matches (the GNU score) \
     in all known genomes of SARS-CoV-2. It assigns a sequence type to each genome based on \
     its profile of unique gene allele sequences. It can type (using whole genome multilocus sequence typing; wgMLST) \
@@ -121,7 +121,7 @@ PARSER.add_argument(
     "--version",
     help="print version and exit",
     action="version",
-    version="%(prog)s 2.3",
+    version="%(prog)s 2.4",
 )
 PARSER.add_argument(
     "query_fna", type=str, help="Query Whole Genome Nucleotide FASTA file to analyze (.fna)"
@@ -133,7 +133,7 @@ ARGS = PARSER.parse_args()
 if bool(vars(ARGS)["individual"]) and bool(vars(ARGS)["exact_matching"]):
     PARSER.exit(status=0, message="Error: You cannot use -i with -e\n")
 OS_SEPARATOR = os.sep
-Classifier_version = '06/21/2021'
+Classifier_version = '08/31/2021'
 START_TIME0 = time.time()
 if ARGS.exact_matching:
     e_matching = 0
@@ -146,7 +146,7 @@ else:
 if ARGS.min_len:
     min_len = ARGS.min_len
 else:
-    min_len = 20000
+    min_len = 25000
 if ARGS.n_max:
     n_max = ARGS.n_max
 else:
@@ -205,19 +205,19 @@ seq_file = ARGS.query_fna#sequence_file
 SEQ_OBJECT = open(seq_file,'r')
 Script_Path = os.path.realpath(__file__)
 DB_Folder_Path = os.path.join(Script_Path.rsplit(OS_SEPARATOR,2)[0], "db")
-VCF_file = os.path.join(DB_Folder_Path,'SNPs_26221_Jun2021.txt') # has the nucleotide(feature) positions
+VCF_file = os.path.join(DB_Folder_Path,'SNPs_25419_Aug2021.txt') # has the nucleotide(feature) positions
 VCF_OBJECT = open(VCF_file,'r')
-CCs_file = os.path.join(DB_Folder_Path,'GNUVID_06212021_CCs_report.txt') # has the WHO naming
+CCs_file = os.path.join(DB_Folder_Path,'GNUVID_08312021_CCs_report.txt') # has the WHO naming
 CCs_OBJECT = open(CCs_file,'r')
-DT_model = os.path.join(DB_Folder_Path,'GNUVID_06212021_RandomForest.joblib')#ML model
-COMP_DB_file = os.path.join(DB_Folder_Path,'GNUVID_06212021_comp_db.joblib')#compressed DB
+DT_model = os.path.join(DB_Folder_Path,'GNUVID_08312021_RandomForest.joblib')#ML model
+COMP_DB_file = os.path.join(DB_Folder_Path,'GNUVID_08312021_comp_db.joblib')#compressed DB
 if os.path.exists(COMP_DB_file):
     logging.info("Found compressed database")
 else:
-    url = 'https://zenodo.org/record/5112632/files/GNUVID_06212021_comp_db.joblib?download=1'
+    url = 'https://zenodo.org/record/5594708/files/GNUVID_08312021_comp_db.joblib?download=1'
     urllib.request.urlretrieve(url, COMP_DB_file)
     logging.info("Downloaded compressed database")
-strains_report_file = os.path.join(DB_Folder_Path,'GNUVID_06212021_DB_isolates_report_deidentified.txt.gz')
+strains_report_file = os.path.join(DB_Folder_Path,'GNUVID_08312021_DB_isolates_report_deidentified.txt.gz')
 Ref_CDS = os.path.join(DB_Folder_Path,'MN908947.3_cds.fna')
 Ref_WG = os.path.join(DB_Folder_Path,'MN908947.3.fasta')
 ############SNPs and CCs_WHO##################
@@ -667,8 +667,9 @@ for y in sorted_final_results:
         fo.write('{},{},{}\n'.format(seqId,Classifier_version,','.join(y_results[-4:])))
 logging.info("Finished Run in --- {:.3f} seconds ---".format(time.time() - START_TIME0))
 logging.info("Typed the query isolate/s and wrote {}".format(output_file.rsplit(OS_SEPARATOR,1)[-1]))
-logging.info("""Thanks for using GNUVID v2.3, I hope you found it useful.
+logging.info("""Thanks for using GNUVID v2.4, I hope you found it useful.
 References:
+GNUVID 'Moustafa AM and Planet PJ 2021, Genome Biology and Evolution;13(9):evab197'.
 WhatsGNU 'Moustafa AM and Planet PJ 2020, Genome Biology;21:58'.
 pandas 'Reback et  al. 2020, DOI:10.5281/zenodo.3509134'.
 Scikit-learn 'Pedregosa et al. 2011, JMLR; 12:2825-2830'.

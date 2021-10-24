@@ -59,6 +59,7 @@ PARSER = argparse.ArgumentParser(
     prog="GNUVID_Post_Training.py",
     description="This script will predict CC for NA_genomes & summarize CCs",)
 PARSER.add_argument("-p","--predict",help="run NA prediction [default OFF]",action="store_true",)
+PARSER.add_argument("-s","--subsample",help="subsample fna as query_aln file used so extract right feature [default OFF]",action="store_true",)
 PARSER.add_argument(
     "inactive_date",
     type=str,
@@ -71,7 +72,7 @@ PARSER.add_argument("metadata", type=str, help="GISAID metadata report")
 PARSER.add_argument("ST_GNUVID_report", type=str, help="ST GNUVID txt report")
 PARSER.add_argument("DB_RF", type=str, help="Random forest DB (.joblib)")
 PARSER.add_argument("features", type=str, help="features (SNPs) positions")
-PARSER.add_argument("query_aln", type=str, help="Query Whole Genome SNPs MSA file to analyze (.aln)")
+PARSER.add_argument("query_aln", type=str, help="Query Whole Genome SNPs MSA file to analyze (.aln) or Query Whole Genome MSA file (.fna)")
 if len(sys.argv) == 1:
     PARSER.print_help()
     sys.exit(0)
@@ -81,8 +82,10 @@ OS_SEPARATOR = os.sep
 if ARGS.predict:
     VCF_OBJECT = open(ARGS.features,'r') # has the nucleotide(feature) positions
     features_list = []
+    postitions_list = []
     for line in VCF_OBJECT:
         features_list.append(line.rstrip())
+        postitions_list.append(int(line.rstrip())-1)
     VCF_OBJECT.close()
     ###########Parse the SNPs alignment file#########
     SNPs_aln = open(ARGS.query_aln,'r')#sequence_file
@@ -99,6 +102,8 @@ if ARGS.predict:
                     if counter in [1000,50000,100000,200000,300000,400000,500000,600000,700000]:
                         print('RAM memory % used: {} for {} seqs'.format(psutil.virtual_memory()[3],counter),flush=True)
                     lst = list(SEQUENCE_STRING)
+                    if ARGS.subsample:
+                        lst = [lst[ind] for ind in postitions_list]
                     SEQUENCES_LIST.append(lst)
                     order_list.append(SEQUENCE_INFO)
                 SEQUENCE_STRING = ""
@@ -110,6 +115,8 @@ if ARGS.predict:
         if counter in [1000,50000,100000,200000,300000,400000,500000,600000,700000]:
             print('RAM memory % used: {} for {} seqs'.format(psutil.virtual_memory()[3],counter),flush=True)
         lst = list(SEQUENCE_STRING)
+        if ARGS.subsample:
+            lst = [lst[ind] for ind in postitions_list]
         SEQUENCES_LIST.append(lst)
         order_list.append(SEQUENCE_INFO)
     SNPs_aln.close()
@@ -295,14 +302,15 @@ gzip2 = op_name.split('_ST_report_')[0] +'_report_deidentified.txt.gz'
 os.system('gzip -c {} > {}'.format(op_name, gzip1))
 os.system('gzip -c {} > {}'.format(Output_GNUVID, gzip2))
 #######WHO Naming#########
-VOC_VOI = {"B.1.1.7":'Alpha', 'B.1.351':'Beta','B.1.351.2':'Beta','B.1.351.3':'Beta',
-            'P.1':'Gamma','P.1.1':'Gamma','P.1.2':'Gamma','B.1.617.2':'Delta',
-            'AY.1':'Delta','AY.2':'Delta','B.1.525':'Eta','B.1.526':'Iota',
-            'B.1.617.1':'Kappa','C.37':'Lambda',
-        'B.1.427':'Alert','B.1.429':'Alert', 'P.2':'Alert','P.3':'Alert',
-        'R.1':'Alert','R.2':'Alert', 'B.1.466.2':'Alert','B.1.621':'Alert',
-        'AV.1':'Alert','B.1.1.318':'Alert','B.1.1.519':'Alert','AT.1':'Alert',
-        'C.36.3':'Alert','C.36.3.1':'Alert','B.1.214.2':'Alert','B.1.427/429':'Alert'}
+VOC_VOI = {"B.1.1.7":'Alpha','Q':'Alpha','B.1.351':'Beta','P.1':'Gamma',
+            'B.1.617.2':'Delta','AY':'Delta','C.37':'Lambda','B.1.621':'Mu',
+            'B.1.525':'VUM','B.1.526':'VUM','B.1.630':'VUM',
+            'B.1.617.1':'VUM','B.1.619':'VUM','B.1.620':'VUM','C.1.2':'VUM',
+        'B.1.427':'VUM','B.1.429':'VUM', 'P.2':'VUM','P.3':'VUM',
+        'R.1':'VUM','B.1.466.2':'VUM','B.1.1.523':'VUM',
+        'AV.1':'VUM','B.1.1.318':'VUM','B.1.1.519':'VUM','AT.1':'VUM',
+        'C.36.3':'VUM','B.1.214.2':'VUM','B.1.427/429':'VUM'}
+variants_list = list(VOC_VOI.keys())
 ######Writing report######
 inactive_date = ARGS.inactive_date
 quiet_date = ARGS.quiet_date
@@ -358,7 +366,10 @@ for CC in sorted(CC_list):
     try:
         WHO = VOC_VOI[Top_Pango[0]]
     except:
-        WHO = 'NA'
+        try:
+            WHO = VOC_VOI[Top_Pango[0].rsplit('.',1)[0]]
+        except:
+            WHO = 'NA'
     output_report_object.write('{}\t{}/{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format(
             CC,STs_count,isolates_count,', '.join(Countries_list),
             Top_Region_percent, dates_range, CC_state, Top_Pango_percent,Top_GIS_percent,WHO,','.join(aa_lst)))

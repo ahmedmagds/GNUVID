@@ -53,23 +53,23 @@ START_TIME = time.time()
 Genes = ['ORF1ab','Surface_glycoprotein','ORF3a','Envelope_protein',
 'Membrane_glycoprotein','ORF6','ORF7a','ORF8','Nucleocapsid_phosphoprotein','ORF10']
 ST_allele_Dict = {}#to assign STs later {'1_1_1_1_2_1_1_1_10_1':'258'}
-report_object = open(ARGS.isolates_report,'r')
-report_object.seek(0)
-header_line = (report_object.readline().rstrip()).split('\t')
+old_report_object = open(ARGS.isolates_report,'r')
+old_report_object.seek(0)
+header_line = (old_report_object.readline().rstrip()).split('\t')
 ST_index = header_line.index('ST')
 ORF1ab_index = (header_line.index('ORF1ab'))
-report_object.seek(0)
-report_object.readline()
+old_report_object.seek(0)
+old_report_object.readline()
 final_report_list = []
 gene_allele = defaultdict(list)
 Previous_STs = []
 Previous_isolates = 0
 ST_dict_counter = Counter()
-for line in report_object:
+for line in old_report_object:
     Previous_isolates += 1
     line = line.rstrip()
     line_list = line.split('\t')
-    final_report_list.append('\t'.join(line_list[:-1]))
+    final_report_list.append('\t'.join(line_list[:]))#ST is in last column
     ST_number = line_list[ST_index]
     Alleles_profile = '_'.join(line_list[ORF1ab_index:ST_index])
     ST_allele_Dict[Alleles_profile] = ST_number
@@ -88,6 +88,7 @@ for gene in Genes:
 logging.info(
     "Parsed the previous database isolates report in --- {:.3f} seconds ---".format(
         time.time() - START_TIME))
+old_report_object.close()
 #####database fna files to be compressed######
 DATABASE_FILES = ARGS.input_folder
 DATABASE_FILES_LIST = []
@@ -226,25 +227,42 @@ report_object = open(report_name, 'w+')
 report_object.write('Isolate\tDate\tCountry\tRegion\t{}\tST\n'.format('\t'.join(Genes)))
 report_object.write('\n'.join(final_report_list))
 report_object.write('\n')
-Phylo_name = RESULTS_FOLDER + 'PHYLOVIZ_Alleles_' + ARGS.output_db + '_ST_{}.txt'.format(str(len(ST_allele_Dict)))
+Phylo_name = RESULTS_FOLDER + 'PHYLOVIZ_All_' + ARGS.output_db + '_ST_{}.txt'.format(str(len(ST_allele_Dict)))
 Phylo_obj = open(Phylo_name,'w')
-Phylo_obj.write('ST\t{}\n'.format('\t'.join(Genes)))
+Phylo_obj.write('ST\t{}\n'.format('\t'.join(Genes)))#all
+Phylo_name2 = RESULTS_FOLDER + 'PHYLOVIZ_Isolates_' + ARGS.output_db + '_ST_{}.txt'.format(str(len(ST_allele_Dict)))
+Phylo_obj2 = open(Phylo_name2,'w')
+Phylo_obj2.write('Isolate\tST\n')#isolates
+Phylo_name3 = RESULTS_FOLDER + 'PHYLOVIZ_STs_' + ARGS.output_db + '_ST_{}.txt'.format(str(len(ST_allele_Dict)))
+Phylo_obj3 = open(Phylo_name3,'w')
+Phylo_obj3.write('ST\t{}\n'.format('\t'.join(Genes)))#STs one representative
 for i in final_report_list:
     i_lst = i.split('\t')
-    Phylo_obj.write('{}\t{}\n'.format(i_lst[-1],'\t'.join(i_lst[4:-1])))
+    alleles_cat = '\t'.join(i_lst[4:-1])
+    Phylo_obj.write('{}\t{}\n'.format(i_lst[-1],'\t'.join(i_lst[4:-1])))#all
+    Phylo_obj2.write('{}\t{}\n'.format(i_lst[0].split('|')[1],i_lst[-1]))#isolates
 for strain in strain_order_list:
     strain_data_list = strain.rsplit('|',2)
     ST_data = Strains_ST_dict[strain_data_list[-2]].split('_')
+    alleles_cat2 = '\t'.join(ST_data[:-1])
     Country = Continent_Dict[strain_data_list[-2]][0]
     Continent = Continent_Dict[strain_data_list[-2]][1]
-    Phylo_obj.write('{}\t{}\n'.format(ST_data[-1],'\t'.join(ST_data[:-1])))
+    Phylo_obj.write('{}\t{}\n'.format(ST_data[-1],alleles_cat2))#all
+    Phylo_obj2.write('{}\t{}\n'.format(strain_data_list[-2],ST_data[-1]))#isolates
     report_object.write('{}\t{}\t{}\t{}\t{}\n'.format(strain,strain_data_list[-1],
                     Country,Continent,'\t'.join(ST_data)))
 logging.info(
     "Typed the {} database isolates and wrote {}".format(
         len(Strains_ST_dict),report_name.rsplit('/',1)[-1]))
+logging.info(
+    "Number of the STs representatives for Phyloviz is {}".format(
+        len(ST_allele_Dict)))
+for j in ST_allele_Dict:
+    Phylo_obj3.write('{}\t{}\n'.format(ST_allele_Dict[j],'\t'.join(j.split('_'))))#STs one representative
 report_object.close()
 Phylo_obj.close()
+Phylo_obj2.close()
+Phylo_obj3.close()
 #########Add GNU score##########
 for ptn_seq in SEQUENCES_DICT_DB:
     ptn_seq_lst = SEQUENCES_DICT_DB[ptn_seq]

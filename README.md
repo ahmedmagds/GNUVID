@@ -6,12 +6,11 @@
 # GNUVID
 **G**ene **N**ovelty **U**nit-based **V**irus **ID**entification for **SARS-CoV-2**
 ## Introduction
-GNUVID (GNU-based Virus IDentification) is a Python3 program. It ranks CDS nucleotide sequences in a genome fna file based on the number of observed exact CDS nucleotide matches in a public or private database. It was created to type SARS-CoV-2 genomes using a whole genome multilocus sequence typing (wgMLST) approach. The 10 ORFs (ORF1ab, S, ORF3a, E, M, ORF6, ORF7a, ORF8, N, ORF10) in SARS-CoV-2 are used for typing. It automatically assigns allele numbers to each of the 10 ORFs and a Sequence Type (ST) to each genome, based on its profile of unique gene allele sequences. It is based on our recent panallelome approach implemented in [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU). It can type your query genome in seconds. As of GNUVID v2.0, GNUVID_Predict.py is a speedy algorithm for assigning Clonal Complexes to new genomes, which uses a Machine Learning Random Forest Classifier.<br/>
+GNUVID (GNU-based Virus IDentification) is a Python3 program. It ranks CDS nucleotide sequences in a genome fna file based on the number of observed exact CDS nucleotide matches in a public or private database. It was created to type SARS-CoV-2 genomes using a whole genome multilocus sequence typing (wgMLST) approach. The 10 ORFs (ORF1ab, S, ORF3a, E, M, ORF6, ORF7a, ORF8, N, ORF10) in SARS-CoV-2 are used for typing. It automatically assigns allele numbers to each of the 10 ORFs and a Sequence Type (ST) to each genome, based on its profile of unique gene allele sequences. It is based on our recent panallelome approach implemented in [WhatsGNU](https://github.com/ahmedmagds/WhatsGNU). The STs are then clustered into bigger groups which are designated clonal complexes (CCs) based on their grouping on a minimum spanning tree (MST). The CCs are more granular than a Pango Lineage. It can type your query genome in seconds. As of GNUVID v2.0, GNUVID_Predict.py is a speedy algorithm for assigning Clonal Complexes to new genomes, which uses a Machine Learning Random Forest Classifier.<br/>
 
-A pre-print of the paper **Emerging SARS-CoV-2 diversity revealed by rapid whole genome sequence typing** can be found here: https://www.biorxiv.org/content/10.1101/2020.12.28.424582v1
+GNUVID is now published [Moustafa AM and Planet PJ 2021. **Emerging SARS-CoV-2 diversity revealed by rapid whole genome sequence typing**. Genome Biology and Evolution;13(9):evab197](https://doi.org/10.1093/gbe/evab197)
 
-A table of acknowledgements for the GISAID SARS-CoV-2 sequences used here is available from:
-https://github.com/ahmedmagds/GNUVID/blob/master/GISAID_acknowledgement_table_2021_01_06-merged_all.pdf
+We acknowledge the open-science of the individual research labs and public agencies that have made their SARS-CoV-2 genomes available on [GISAID](https://www.gisaid.org/).
 
 ## Install and use as simple as
 Make a new environment and install GNUVID in it
@@ -20,46 +19,42 @@ conda create -n GNUVID -c bioconda gnuvid
 conda activate GNUVID
 ```
 
-## Globally circulating clonal complexes as  of 2021-06-21:
+## Globally circulating clonal complexes as  of 2021-08-31:
 
-- 999106 High Quality GISAID sequences have been included in this analysis.
+- 1,392,002 High Quality GISAID sequences have been included in this analysis.
 
-- GNUVID compressed the 9991060 ORFs in the 999106 genomes to 549768 unique alleles.
+- GNUVID compressed the 13920020 ORFs in the 1392002 genomes to 755489 unique alleles.
 
-- 523727 Sequence Types (STs) have been assigned in this dataset and were clustered in 2888 clonal complexes (CCs).
+- 731164 Sequence Types (STs) have been assigned in this dataset and were clustered in 4084 clonal complexes (CCs).
 
-- 2482 new CCs have been assigned (406 CCs in Jan 2021 to 2888 in Jun 2021).
+- 1196 new CCs have been assigned (2888 CCs in Jun 2021 to 4084 in Aug 2021).
 
-- 1716 CCs have been Inactive (i.e. Last time seen more than 1 month before 2021-06-21).
+- 3123 CCs have been Inactive (i.e. Last time seen more than 1 month before 2021-08-31).
 
-- 995 CCs have gone Quiet (i.e. Last seen 2-4 weeks before 2021-06-21).
+- 397 CCs have gone Quiet (i.e. Last seen 2-4 weeks before 2021-08-31).
 
-- 177 CCs have been Active (i.e. Last seen within the 2 weeks before 2021-06-21).
+- 564 CCs have been Active (i.e. Last seen within the 2 weeks before 2021-08-31).
 
 
-## GNUVID now reports the WHO Naming system for VOCs/VOIs (e.g. Alpha, Beta..etc) as per the WHO updated on 07/06/2021:
+## GNUVID now reports the WHO Naming system for VOCs/VOIs/VUMs (e.g. Alpha, Beta..etc) as per the WHO updated on 10/22/2021:
 
-- 1346 CCs representing the **Alpha** VOC (a.k.a. B.1.1.7).
+- 1597 CCs representing the **Alpha** VOC (a.k.a. B.1.1.7 and descendant Q.* lineages).
 
-- 25 CCs representing the **Beta** VOC (a.k.a. B.1.351, B.1.351.2, B.1.351.3).
+- 27 CCs representing the **Beta** VOC (a.k.a. B.1.351 and descendant lineages).
 
-- 61 CCs representing the **Gamma** VOC (a.k.a. P.1, P.1.1, P.1.2).
+- 117 CCs representing the **Gamma** VOC (a.k.a. P.1 and descendant lineages).
 
-- 47 CCs representing the **Delta** VOC (a.k.a. B.1.617.2, AY.1, AY.2).
+- 777 CCs representing the **Delta** VOC (a.k.a. B.1.617.2 and descendant AY.* lineages).
 
-- 3 CCs representing the **Eta** VOI (a.k.a. B.1.525).
+- 6 CC representing the **Lambda** VOI (a.k.a. C.37).
 
-- 80 CCs representing the **Iota** VOI (a.k.a. B.1.526).
+- 6 CCs representing the **Mu** VOI (a.k.a. B.1.621).
 
-- 8 CCs representing the **Kappa** VOI (a.k.a. B.1.617.1).
+- 225 CCs representing the 16 lineages (B.1.427/429, R.1, C.1.2, B.1.466.2, B.1.1.318, B.1.1.519, B.1.1.523, C.36.3, B.1.525, B.1.526, B.1.619, B.1.620, B.1.630, B.1.617.1 and B.1.214.2) that are currently designated **Variants Under Monitoring (VUM)** by WHO for Further Monitoring.
 
-- 1 CC representing the **Lambda** VOI (a.k.a. C.37).
+- The remaining 1329/4084 CCs are not designated VOC/VOI/VUM by WHO (10/22/2021).
 
-- 124 CCs representing the 12 lineages (B.1.427/429, P.2, P.3, R.1/R.2, B.1.466.2, B.1.621, AV.1, B.1.1.318, B.1.1.519, AT.1, C.36.3/C.36.3.1, and B.1.214.2) that are currently designated **Alerts** by WHO for Further Monitoring.
-
-- The remaining 1193/2888 CCs are not designatd VOC/VOI/Alert by WHO (07/06/2021).
-
-**A table showing summary information of the 177 Active Clonal Complexes (CCs) can be found [here](https://github.com/ahmedmagds/GNUVID/tree/master/db). A full report for the 2888 CCs can be found [here](https://github.com/ahmedmagds/GNUVID/blob/master/db/GNUVID_06212021_CCs_report.txt)**
+**A table showing summary information of the 564 Active Clonal Complexes (CCs) can be found [here](https://github.com/ahmedmagds/GNUVID/tree/master/db). A full report for the 4084 CCs can be found [here](https://github.com/ahmedmagds/GNUVID/blob/master/db/GNUVID_08312021_CCs_report.txt)**
 
 ## Installation
 ### Dependencies
@@ -97,7 +92,7 @@ $export PATH=$PATH:/path/to/folder/having/GNUVID/bin
 If you need it permanently, you can add this last line to your .bashrc or .bash_profile.
 ### Test
 * Type GNUVID_Predict.py -h and it should output help screen.
-* Type GNUVID_Predict.py -v and you should see an output like GNUVID.py v2.3.
+* Type GNUVID_Predict.py -v and you should see an output like GNUVID.py v2.4.
 
 ## Usage for GNUVID_Predict.py
 ### Input
@@ -115,7 +110,7 @@ $GNUVID_Predict.py -i -o new_genomes_GNUVID new_genomes.fasta
 ```
 usage: GNUVID_Predict.py [-h] [-o OUTPUT_FOLDER] [-m MIN_LEN] [-n N_MAX] [-b BLOCK_PRED] [-e] [-i] [-f] [-q] [-v] query_fna
 
-GNUVID v2.3 uses the natural variation in public genomes of SARS-CoV-2 to rank
+GNUVID v2.4 uses the natural variation in public genomes of SARS-CoV-2 to rank
 gene sequences based on the number of observed exact matches (the GNU score)
 in all known genomes of SARS-CoV-2. It assigns a sequence type to each genome
 based on its profile of unique gene allele sequences. It can type (using whole

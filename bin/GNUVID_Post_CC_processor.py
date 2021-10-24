@@ -11,7 +11,7 @@ PARSER = argparse.ArgumentParser(
 PARSER.add_argument("-l","--level", type=int, help="level of locus variant to assign CC (e.g. SLV, DLV) [Default: 2]")
 PARSER.add_argument("-n","--number_connections", type=int, help="number of connections to assign CC [Default: 20]")
 PARSER.add_argument("output_path", type=str, help="output path folder for aln")
-PARSER.add_argument("eBURST_MST_report", type=str, help="eBURST MST csv report")
+PARSER.add_argument("eBURST_MST_report", type=str, help="eBURST MST txt report")
 PARSER.add_argument("ST_GNUVID_report", type=str, help="ST GNUVID csv report")
 PARSER.add_argument("fasta_aln", type=str, help="path to Multifasta.fna name")
 if len(sys.argv) == 1:
